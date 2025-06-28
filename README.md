@@ -117,6 +117,20 @@ real-estate-mcp/
    python main.py
    ```
 
+## 🔍 MCP Inspector
+
+To inspect and debug your MCP server, you can use the MCP Inspector tool:
+
+```bash
+npx @modelcontextprotocol/inspector
+```
+
+This will launch the MCP Inspector interface, allowing you to:
+- Monitor MCP messages in real-time
+- Debug tool and resource calls
+- Inspect server responses
+- Test server functionality
+
 ## 🌐 Server Transport
 
 The server uses **Server-Sent Events (SSE)** transport, making it compatible with:
