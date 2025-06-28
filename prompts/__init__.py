@@ -1,0 +1,1 @@
+# Prompts package for Real Estate MCP Server 

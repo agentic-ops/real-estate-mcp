@@ -1,0 +1,1 @@
+# Resources package for Real Estate MCP Server 
