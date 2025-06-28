@@ -1,0 +1,185 @@
+{
+  "market_overview": {
+    "current_period": "Q1 2024",
+    "market_type": "Seller's Market",
+    "inventory_level": "Low",
+    "avg_days_on_market": 18,
+    "price_trend": "+7.2% year-over-year",
+    "forecast": "Continued growth expected through 2024"
+  },
+  "price_analytics": {
+    "median_home_price": 485000,
+    "average_home_price": 520000,
+    "price_per_sqft": 285,
+    "price_ranges": {
+      "under_300k": {
+        "percentage": 15,
+        "inventory": 45
+      },
+      "300k_500k": {
+        "percentage": 35,
+        "inventory": 105
+      },
+      "500k_750k": {
+        "percentage": 30,
+        "inventory": 90
+      },
+      "750k_1m": {
+        "percentage": 15,
+        "inventory": 45
+      },
+      "over_1m": {
+        "percentage": 5,
+        "inventory": 15
+      }
+    }
+  },
+  "area_performance": {
+    "Downtown Riverside": {
+      "median_price": 450000,
+      "price_change": "+5.8%",
+      "days_on_market": 12,
+      "inventory": 25,
+      "demand_level": "High"
+    },
+    "Woodcrest": {
+      "median_price": 650000,
+      "price_change": "+8.2%",
+      "days_on_market": 10,
+      "inventory": 35,
+      "demand_level": "Very High"
+    },
+    "Canyon Crest": {
+      "median_price": 1200000,
+      "price_change": "+12.5%",
+      "days_on_market": 25,
+      "inventory": 15,
+      "demand_level": "Medium"
+    },
+    "Arlington Heights": {
+      "median_price": 380000,
+      "price_change": "+4.2%",
+      "days_on_market": 22,
+      "inventory": 40,
+      "demand_level": "Medium"
+    },
+    "La Sierra": {
+      "median_price": 520000,
+      "price_change": "+6.8%",
+      "days_on_market": 15,
+      "inventory": 30,
+      "demand_level": "High"
+    }
+  },
+  "property_type_analysis": {
+    "Single Family Homes": {
+      "median_price": 485000,
+      "inventory": 180,
+      "avg_days_on_market": 16,
+      "demand": "High"
+    },
+    "Townhouses": {
+      "median_price": 395000,
+      "inventory": 45,
+      "avg_days_on_market": 20,
+      "demand": "Medium"
+    },
+    "Condos": {
+      "median_price": 320000,
+      "inventory": 60,
+      "avg_days_on_market": 25,
+      "demand": "Medium"
+    },
+    "Luxury Homes": {
+      "median_price": 1250000,
+      "inventory": 15,
+      "avg_days_on_market": 30,
+      "demand": "Low"
+    }
+  },
+  "seasonal_trends": {
+    "spring": {
+      "avg_days_on_market": 14,
+      "price_trend": "+2.1%",
+      "inventory_change": "+15%"
+    },
+    "summer": {
+      "avg_days_on_market": 12,
+      "price_trend": "+1.8%",
+      "inventory_change": "+8%"
+    },
+    "fall": {
+      "avg_days_on_market": 18,
+      "price_trend": "+0.5%",
+      "inventory_change": "-5%"
+    },
+    "winter": {
+      "avg_days_on_market": 25,
+      "price_trend": "-1.2%",
+      "inventory_change": "-12%"
+    }
+  },
+  "demographics": {
+    "buyer_types": {
+      "first_time_buyers": 35,
+      "move_up_buyers": 25,
+      "downsizers": 15,
+      "investors": 20,
+      "luxury_buyers": 5
+    },
+    "age_groups": {
+      "25_34": 30,
+      "35_44": 35,
+      "45_54": 20,
+      "55_64": 10,
+      "65_plus": 5
+    }
+  },
+  "school_impact": {
+    "top_rated_schools": {
+      "Woodcrest Elementary": {
+        "rating": 9.2,
+        "price_impact": "+15%",
+        "demand": "Very High"
+      },
+      "Canyon Crest Academy": {
+        "rating": 9.8,
+        "price_impact": "+25%",
+        "demand": "Very High"
+      },
+      "La Sierra High": {
+        "rating": 8.5,
+        "price_impact": "+12%",
+        "demand": "High"
+      }
+    }
+  },
+  "investment_opportunities": {
+    "rental_market": {
+      "avg_rent_1br": 1800,
+      "avg_rent_2br": 2200,
+      "avg_rent_3br": 2800,
+      "cap_rate_range": "4.5-6.2%",
+      "roi_projection": "8-12% annually"
+    },
+    "hot_neighborhoods": [
+      {
+        "area": "La Sierra",
+        "reason": "New developments",
+        "growth_potential": "High"
+      },
+      {
+        "area": "Arlington Heights",
+        "reason": "Gentrification",
+        "growth_potential": "Medium"
+      }
+    ]
+  },
+  "market_indicators": {
+    "absorption_rate": 2.1,
+    "months_of_inventory": 1.8,
+    "price_to_rent_ratio": 18.5,
+    "affordability_index": 65,
+    "market_health_score": 8.2
+  }
+} 

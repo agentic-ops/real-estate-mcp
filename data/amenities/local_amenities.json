@@ -1,0 +1,300 @@
+{
+  "schools": {
+    "elementary_schools": [
+      {
+        "name": "Woodcrest Elementary",
+        "address": "1234 Woodcrest Dr",
+        "rating": 9.2,
+        "district": "Riverside Unified",
+        "grades": "K-5",
+        "enrollment": 450,
+        "special_programs": ["GATE", "Dual Language", "STEM Focus"]
+      },
+      {
+        "name": "Arlington Heights Elementary",
+        "address": "5678 Arlington Ave",
+        "rating": 7.8,
+        "district": "Riverside Unified",
+        "grades": "K-5",
+        "enrollment": 380,
+        "special_programs": ["Title I", "After School Program"]
+      },
+      {
+        "name": "La Sierra Elementary",
+        "address": "9012 La Sierra Way",
+        "rating": 8.5,
+        "district": "Riverside Unified",
+        "grades": "K-5",
+        "enrollment": 420,
+        "special_programs": ["GATE", "Music Program"]
+      }
+    ],
+    "middle_schools": [
+      {
+        "name": "Canyon Crest Middle",
+        "address": "3456 Canyon Crest Blvd",
+        "rating": 8.9,
+        "district": "Riverside Unified",
+        "grades": "6-8",
+        "enrollment": 650,
+        "special_programs": ["STEM Academy", "Sports Programs"]
+      },
+      {
+        "name": "Arlington Heights Middle",
+        "address": "7890 Arlington Ave",
+        "rating": 7.5,
+        "district": "Riverside Unified",
+        "grades": "6-8",
+        "enrollment": 580,
+        "special_programs": ["Arts Program", "Technology Focus"]
+      }
+    ],
+    "high_schools": [
+      {
+        "name": "Canyon Crest Academy",
+        "address": "1234 Canyon Crest Blvd",
+        "rating": 9.8,
+        "district": "Riverside Unified",
+        "grades": "9-12",
+        "enrollment": 1200,
+        "special_programs": ["IB Program", "STEM Academy", "Arts Conservatory"]
+      },
+      {
+        "name": "La Sierra High",
+        "address": "5678 La Sierra Way",
+        "rating": 8.5,
+        "district": "Riverside Unified",
+        "grades": "9-12",
+        "enrollment": 1800,
+        "special_programs": ["AP Programs", "Sports Academy", "Career Technical Education"]
+      }
+    ],
+    "private_schools": [
+      {
+        "name": "Riverside Christian Academy",
+        "address": "9012 Mission Inn Ave",
+        "type": "Private Christian",
+        "grades": "K-12",
+        "tuition": 12000,
+        "enrollment": 300
+      },
+      {
+        "name": "Montessori School of Riverside",
+        "address": "3456 Woodcrest Dr",
+        "type": "Private Montessori",
+        "grades": "K-8",
+        "tuition": 15000,
+        "enrollment": 150
+      }
+    ]
+  },
+  "parks_and_recreation": {
+    "parks": [
+      {
+        "name": "Fairmount Park",
+        "address": "2601 Fairmount Blvd",
+        "size": "150 acres",
+        "features": ["Lake", "Walking trails", "Playground", "Picnic areas", "Tennis courts"],
+        "area": "Downtown Riverside"
+      },
+      {
+        "name": "Woodcrest Community Park",
+        "address": "1234 Woodcrest Dr",
+        "size": "25 acres",
+        "features": ["Baseball fields", "Soccer fields", "Playground", "Walking trails", "Dog park"],
+        "area": "Woodcrest"
+      },
+      {
+        "name": "Canyon Crest Park",
+        "address": "5678 Canyon Crest Blvd",
+        "size": "40 acres",
+        "features": ["Hiking trails", "Mountain views", "Picnic areas", "Wildlife viewing"],
+        "area": "Canyon Crest"
+      },
+      {
+        "name": "Arlington Heights Park",
+        "address": "9012 Arlington Ave",
+        "size": "15 acres",
+        "features": ["Basketball courts", "Playground", "Community center", "Swimming pool"],
+        "area": "Arlington Heights"
+      }
+    ],
+    "recreation_centers": [
+      {
+        "name": "Riverside Community Center",
+        "address": "1234 Main Street",
+        "features": ["Fitness center", "Swimming pool", "Basketball courts", "Meeting rooms"],
+        "membership_fee": 50
+      },
+      {
+        "name": "La Sierra Recreation Center",
+        "address": "5678 La Sierra Way",
+        "features": ["Gym", "Tennis courts", "Soccer fields", "Youth programs"],
+        "membership_fee": 40
+      }
+    ]
+  },
+  "shopping": {
+    "malls": [
+      {
+        "name": "Riverside Plaza",
+        "address": "3456 Main Street",
+        "anchor_stores": ["Macy's", "Target", "Best Buy"],
+        "total_stores": 80,
+        "area": "Downtown Riverside"
+      },
+      {
+        "name": "Galleria at Tyler",
+        "address": "7890 Tyler Street",
+        "anchor_stores": ["Nordstrom", "Macy's", "Apple Store"],
+        "total_stores": 120,
+        "area": "La Sierra"
+      }
+    ],
+    "grocery_stores": [
+      {
+        "name": "Ralphs",
+        "address": "1234 Woodcrest Dr",
+        "area": "Woodcrest",
+        "type": "Full-service grocery"
+      },
+      {
+        "name": "Vons",
+        "address": "5678 Arlington Ave",
+        "area": "Arlington Heights",
+        "type": "Full-service grocery"
+      },
+      {
+        "name": "Trader Joe's",
+        "address": "9012 Canyon Crest Blvd",
+        "area": "Canyon Crest",
+        "type": "Specialty grocery"
+      },
+      {
+        "name": "Whole Foods Market",
+        "address": "3456 La Sierra Way",
+        "area": "La Sierra",
+        "type": "Organic grocery"
+      }
+    ]
+  },
+  "healthcare": {
+    "hospitals": [
+      {
+        "name": "Riverside Community Hospital",
+        "address": "4445 Magnolia Ave",
+        "type": "Full-service hospital",
+        "specialties": ["Emergency care", "Cardiology", "Orthopedics", "Maternity"],
+        "rating": 4.2
+      },
+      {
+        "name": "Kaiser Permanente Riverside Medical Center",
+        "address": "10800 Magnolia Ave",
+        "type": "Full-service hospital",
+        "specialties": ["Primary care", "Specialty care", "Emergency care"],
+        "rating": 4.5
+      }
+    ],
+    "urgent_care": [
+      {
+        "name": "Riverside Urgent Care",
+        "address": "1234 Main Street",
+        "hours": "8AM-8PM daily",
+        "services": ["Minor injuries", "Illness treatment", "Physicals"]
+      },
+      {
+        "name": "Woodcrest Urgent Care",
+        "address": "5678 Woodcrest Dr",
+        "hours": "7AM-9PM daily",
+        "services": ["Minor injuries", "Illness treatment", "Lab services"]
+      }
+    ]
+  },
+  "transportation": {
+    "public_transit": {
+      "bus_routes": [
+        {
+          "route": "Route 1",
+          "description": "Downtown to Woodcrest",
+          "frequency": "Every 15 minutes",
+          "hours": "6AM-10PM"
+        },
+        {
+          "route": "Route 2",
+          "description": "Arlington Heights to La Sierra",
+          "frequency": "Every 20 minutes",
+          "hours": "6AM-9PM"
+        }
+      ],
+      "train_station": {
+        "name": "Riverside Downtown Station",
+        "address": "4066 Vine Street",
+        "services": ["Metrolink", "Amtrak"],
+        "destinations": ["Los Angeles", "San Bernardino", "Orange County"]
+      }
+    },
+    "highways": [
+      {
+        "name": "Interstate 91",
+        "description": "East-West corridor",
+        "access_points": ["Downtown", "Arlington Heights", "La Sierra"]
+      },
+      {
+        "name": "Interstate 215",
+        "description": "North-South corridor",
+        "access_points": ["Woodcrest", "Canyon Crest"]
+      }
+    ]
+  },
+  "entertainment": {
+    "cultural_attractions": [
+      {
+        "name": "Riverside Art Museum",
+        "address": "3425 Mission Inn Ave",
+        "type": "Art museum",
+        "admission": 5,
+        "area": "Downtown Riverside"
+      },
+      {
+        "name": "Mission Inn Hotel & Spa",
+        "address": "3649 Mission Inn Ave",
+        "type": "Historic hotel",
+        "features": ["Restaurants", "Spa", "Historic tours", "Festival of Lights"],
+        "area": "Downtown Riverside"
+      },
+      {
+        "name": "Riverside Municipal Auditorium",
+        "address": "3485 Mission Inn Ave",
+        "type": "Performance venue",
+        "capacity": 1500,
+        "area": "Downtown Riverside"
+      }
+    ],
+    "restaurants": [
+      {
+        "name": "Mario's Place",
+        "address": "3646 Mission Inn Ave",
+        "cuisine": "Italian",
+        "price_range": "$$$",
+        "rating": 4.5,
+        "area": "Downtown Riverside"
+      },
+      {
+        "name": "Simple Simon's",
+        "address": "3637 Mission Inn Ave",
+        "cuisine": "American",
+        "price_range": "$$",
+        "rating": 4.3,
+        "area": "Downtown Riverside"
+      },
+      {
+        "name": "Canyon Crest Country Club",
+        "address": "975 Country Club Dr",
+        "cuisine": "American",
+        "price_range": "$$$",
+        "rating": 4.4,
+        "area": "Canyon Crest"
+      }
+    ]
+  }
+} 

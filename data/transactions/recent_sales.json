@@ -1,0 +1,57 @@
+{
+  "recent_sales": [
+    {
+      "id": "SALE001",
+      "property_address": "2345 Mission Inn Ave",
+      "area": "Downtown Riverside",
+      "property_type": "Single Family Home",
+      "style": "Victorian",
+      "bedrooms": 3,
+      "bathrooms": 2,
+      "square_feet": 2100,
+      "lot_size": "0.12 acres",
+      "list_price": 485000,
+      "sale_price": 475000,
+      "list_date": "2024-01-05",
+      "sale_date": "2024-01-10",
+      "days_on_market": 5,
+      "agent_id": "AGENT001",
+      "buyer_type": "First-time buyer",
+      "financing": "Conventional",
+      "appraisal_value": 480000,
+      "price_per_sqft": 226,
+      "concessions": "None",
+      "notes": "Quick sale, buyer was pre-approved and very motivated. Property was in excellent condition."
+    },
+    {
+      "id": "SALE002",
+      "property_address": "4567 Woodcrest Dr",
+      "area": "Woodcrest",
+      "property_type": "Single Family Home",
+      "style": "Contemporary",
+      "bedrooms": 4,
+      "bathrooms": 3,
+      "square_feet": 2800,
+      "lot_size": "0.25 acres",
+      "list_price": 695000,
+      "sale_price": 680000,
+      "list_date": "2023-12-10",
+      "sale_date": "2023-12-15",
+      "days_on_market": 5,
+      "agent_id": "AGENT001",
+      "buyer_type": "Move-up buyer",
+      "financing": "Conventional",
+      "appraisal_value": 685000,
+      "price_per_sqft": 243,
+      "concessions": "Seller paid $5,000 in closing costs",
+      "notes": "Family with young children, attracted by excellent schools in Woodcrest area."
+    }
+  ],
+  "sales_summary": {
+    "total_sales": 8,
+    "total_volume": 5375000,
+    "average_sale_price": 671875,
+    "average_days_on_market": 17,
+    "average_price_per_sqft": 254
+  }
+} 

@@ -1,0 +1,207 @@
+{
+  "clients": [
+    {
+      "id": "CLIENT001",
+      "name": "John and Lisa Thompson",
+      "type": "Buyer",
+      "status": "Active",
+      "contact_info": {
+        "phone": "(951) 555-1001",
+        "email": "john.lisa.thompson@email.com",
+        "address": "1234 Oak Street, Riverside, CA 92501"
+      },
+      "preferences": {
+        "budget_range": {
+          "min": 400000,
+          "max": 600000
+        },
+        "desired_areas": ["Woodcrest", "La Sierra"],
+        "property_type": "Single Family Home",
+        "bedrooms": "3-4",
+        "bathrooms": "2-3",
+        "must_haves": ["Good schools", "Family-friendly neighborhood", "Backyard"],
+        "nice_to_haves": ["Pool", "Updated kitchen", "Garage"]
+      },
+      "timeline": "3-6 months",
+      "financing": {
+        "type": "Conventional",
+        "pre_approved": true,
+        "down_payment": "20%",
+        "lender": "Riverside Community Bank"
+      },
+      "agent_id": "AGENT001",
+      "notes": "First-time buyers, very motivated. Lisa is pregnant with their first child. Need to move before baby arrives.",
+      "last_contact": "2024-02-01",
+      "next_follow_up": "2024-02-08",
+      "viewed_properties": ["PROP002", "PROP005"]
+    },
+    {
+      "id": "CLIENT002",
+      "name": "Dr. Robert and Jennifer Williams",
+      "type": "Buyer",
+      "status": "Active",
+      "contact_info": {
+        "phone": "(951) 555-1002",
+        "email": "dr.robert.williams@email.com",
+        "address": "5678 Pine Avenue, Riverside, CA 92506"
+      },
+      "preferences": {
+        "budget_range": {
+          "min": 800000,
+          "max": 1500000
+        },
+        "desired_areas": ["Canyon Crest"],
+        "property_type": "Luxury Home",
+        "bedrooms": "4-5",
+        "bathrooms": "4+",
+        "must_haves": ["Mountain views", "Large lot", "High-end finishes"],
+        "nice_to_haves": ["Pool", "Wine cellar", "Home theater"]
+      },
+      "timeline": "6-12 months",
+      "financing": {
+        "type": "Jumbo",
+        "pre_approved": true,
+        "down_payment": "30%",
+        "lender": "Wells Fargo Private Bank"
+      },
+      "agent_id": "AGENT002",
+      "notes": "Moving from LA for better quality of life. Robert is a surgeon, Jennifer is a lawyer. Looking for luxury estate.",
+      "last_contact": "2024-01-28",
+      "next_follow_up": "2024-02-05",
+      "viewed_properties": ["PROP003"]
+    },
+    {
+      "id": "CLIENT003",
+      "name": "Maria Rodriguez",
+      "type": "Seller",
+      "status": "Active",
+      "contact_info": {
+        "phone": "(951) 555-1003",
+        "email": "maria.rodriguez@email.com",
+        "address": "2345 Mission Inn Ave, Riverside, CA 92501"
+      },
+      "property_to_sell": {
+        "address": "2345 Mission Inn Ave",
+        "property_type": "Single Family Home",
+        "bedrooms": 3,
+        "bathrooms": 2,
+        "square_feet": 2100,
+        "estimated_value": 475000
+      },
+      "motivation": "Downsizing",
+      "timeline": "2-3 months",
+      "agent_id": "AGENT001",
+      "notes": "Widow looking to downsize after children moved out. Wants to stay in downtown area but smaller home.",
+      "last_contact": "2024-01-30",
+      "next_follow_up": "2024-02-07",
+      "listing_status": "Preparing for market"
+    },
+    {
+      "id": "CLIENT004",
+      "name": "David Park",
+      "type": "Investor",
+      "status": "Active",
+      "contact_info": {
+        "phone": "(951) 555-1004",
+        "email": "david.park@email.com",
+        "address": "9012 Business Blvd, Riverside, CA 92507"
+      },
+      "preferences": {
+        "budget_range": {
+          "min": 300000,
+          "max": 500000
+        },
+        "desired_areas": ["Arlington Heights", "La Sierra"],
+        "property_type": ["Townhouse", "Single Family Home"],
+        "investment_strategy": "Buy and hold",
+        "target_roi": "8-12%",
+        "must_haves": ["Good rental potential", "Low maintenance", "Positive cash flow"]
+      },
+      "timeline": "Ongoing",
+      "financing": {
+        "type": "Investment",
+        "pre_approved": true,
+        "down_payment": "25%",
+        "lender": "Investment Property Bank"
+      },
+      "agent_id": "AGENT002",
+      "notes": "Experienced real estate investor with 15 properties. Looking to expand portfolio in Riverside market.",
+      "last_contact": "2024-01-25",
+      "next_follow_up": "2024-02-02",
+      "viewed_properties": ["PROP004"]
+    },
+    {
+      "id": "CLIENT005",
+      "name": "Alex Martinez",
+      "type": "Buyer",
+      "status": "Active",
+      "contact_info": {
+        "phone": "(951) 555-1005",
+        "email": "alex.martinez@email.com",
+        "address": "3456 College Ave, Riverside, CA 92506"
+      },
+      "preferences": {
+        "budget_range": {
+          "min": 350000,
+          "max": 450000
+        },
+        "desired_areas": ["Arlington Heights", "Downtown Riverside"],
+        "property_type": ["Townhouse", "Condo"],
+        "bedrooms": "2-3",
+        "bathrooms": "2",
+        "must_haves": ["Low maintenance", "Good location", "Modern amenities"],
+        "nice_to_haves": ["Gym", "Pool", "Security"]
+      },
+      "timeline": "2-4 months",
+      "financing": {
+        "type": "FHA",
+        "pre_approved": true,
+        "down_payment": "3.5%",
+        "lender": "Riverside Credit Union"
+      },
+      "agent_id": "AGENT003",
+      "notes": "Young professional, first-time buyer. Works in tech, wants modern amenities and low maintenance lifestyle.",
+      "last_contact": "2024-02-02",
+      "next_follow_up": "2024-02-09",
+      "viewed_properties": ["PROP004"]
+    },
+    {
+      "id": "CLIENT006",
+      "name": "Sarah and Mike Johnson",
+      "type": "Seller",
+      "status": "Pending",
+      "contact_info": {
+        "phone": "(951) 555-1006",
+        "email": "sarah.mike.johnson@email.com",
+        "address": "4567 Woodcrest Dr, Riverside, CA 92508"
+      },
+      "property_to_sell": {
+        "address": "4567 Woodcrest Dr",
+        "property_type": "Single Family Home",
+        "bedrooms": 4,
+        "bathrooms": 3,
+        "square_feet": 2800,
+        "sale_price": 680000,
+        "sale_date": "2023-12-15"
+      },
+      "motivation": "Job relocation",
+      "agent_id": "AGENT001",
+      "notes": "Sold successfully. Mike got job transfer to Seattle. Very satisfied with the process.",
+      "last_contact": "2023-12-15",
+      "status": "Closed"
+    }
+  ],
+  "lead_sources": {
+    "website": 35,
+    "referral": 25,
+    "open_house": 20,
+    "social_media": 15,
+    "direct_mail": 5
+  },
+  "client_satisfaction": {
+    "average_rating": 4.8,
+    "total_reviews": 45,
+    "repeat_clients": 12,
+    "referrals_generated": 28
+  }
+} 

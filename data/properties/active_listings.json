@@ -1,0 +1,200 @@
+{
+  "active_listings": [
+    {
+      "id": "PROP001",
+      "address": "1234 Mission Inn Ave",
+      "city": "Riverside",
+      "state": "CA",
+      "zip_code": "92501",
+      "area": "Downtown Riverside",
+      "property_type": "Single Family Home",
+      "style": "Victorian",
+      "year_built": 1895,
+      "price": 485000,
+      "bedrooms": 3,
+      "bathrooms": 2.5,
+      "square_feet": 2200,
+      "lot_size": "0.15 acres",
+      "description": "Beautifully restored Victorian home in historic downtown. Features original hardwood floors, stained glass windows, and modern updates throughout. Walking distance to Mission Inn and downtown amenities.",
+      "features": [
+        "Hardwood floors",
+        "Stained glass windows",
+        "Updated kitchen",
+        "Central AC",
+        "Off-street parking",
+        "Historic charm"
+      ],
+      "images": [
+        "https://example.com/prop001_front.jpg",
+        "https://example.com/prop001_living.jpg",
+        "https://example.com/prop001_kitchen.jpg"
+      ],
+      "agent_id": "AGENT001",
+      "list_date": "2024-01-15",
+      "status": "Active",
+      "open_house": {
+        "scheduled": true,
+        "date": "2024-02-10",
+        "time": "1:00 PM - 4:00 PM"
+      }
+    },
+    {
+      "id": "PROP002",
+      "address": "5678 Woodcrest Dr",
+      "city": "Riverside",
+      "state": "CA",
+      "zip_code": "92508",
+      "area": "Woodcrest",
+      "property_type": "Single Family Home",
+      "style": "Contemporary",
+      "year_built": 2018,
+      "price": 675000,
+      "bedrooms": 4,
+      "bathrooms": 3,
+      "square_feet": 2800,
+      "lot_size": "0.25 acres",
+      "description": "Stunning contemporary home in sought-after Woodcrest neighborhood. Open floor plan with gourmet kitchen, master suite with spa-like bathroom, and backyard oasis with pool.",
+      "features": [
+        "Open floor plan",
+        "Gourmet kitchen",
+        "Master suite",
+        "Pool",
+        "Solar panels",
+        "Smart home features"
+      ],
+      "images": [
+        "https://example.com/prop002_front.jpg",
+        "https://example.com/prop002_kitchen.jpg",
+        "https://example.com/prop002_pool.jpg"
+      ],
+      "agent_id": "AGENT001",
+      "list_date": "2024-01-20",
+      "status": "Active",
+      "open_house": {
+        "scheduled": false,
+        "date": null,
+        "time": null
+      }
+    },
+    {
+      "id": "PROP003",
+      "address": "9012 Canyon Crest Blvd",
+      "city": "Riverside",
+      "state": "CA",
+      "zip_code": "92507",
+      "area": "Canyon Crest",
+      "property_type": "Luxury Home",
+      "style": "Mediterranean",
+      "year_built": 2020,
+      "price": 1250000,
+      "bedrooms": 5,
+      "bathrooms": 4.5,
+      "square_feet": 4200,
+      "lot_size": "0.5 acres",
+      "description": "Luxurious Mediterranean estate with breathtaking mountain views. Features include chef's kitchen, home theater, wine cellar, and resort-style backyard with infinity pool.",
+      "features": [
+        "Mountain views",
+        "Chef's kitchen",
+        "Home theater",
+        "Wine cellar",
+        "Infinity pool",
+        "Smart home automation"
+      ],
+      "images": [
+        "https://example.com/prop003_front.jpg",
+        "https://example.com/prop003_kitchen.jpg",
+        "https://example.com/prop003_pool.jpg"
+      ],
+      "agent_id": "AGENT002",
+      "list_date": "2024-01-25",
+      "status": "Active",
+      "open_house": {
+        "scheduled": true,
+        "date": "2024-02-11",
+        "time": "2:00 PM - 5:00 PM"
+      }
+    },
+    {
+      "id": "PROP004",
+      "address": "3456 Arlington Ave",
+      "city": "Riverside",
+      "state": "CA",
+      "zip_code": "92506",
+      "area": "Arlington Heights",
+      "property_type": "Townhouse",
+      "style": "Modern",
+      "year_built": 2015,
+      "price": 395000,
+      "bedrooms": 3,
+      "bathrooms": 2.5,
+      "square_feet": 1800,
+      "lot_size": "0.08 acres",
+      "description": "Modern townhouse with low maintenance lifestyle. Features include attached garage, private patio, and community amenities. Perfect for first-time buyers or investors.",
+      "features": [
+        "Attached garage",
+        "Private patio",
+        "Community pool",
+        "Low maintenance",
+        "Modern appliances",
+        "HOA included"
+      ],
+      "images": [
+        "https://example.com/prop004_front.jpg",
+        "https://example.com/prop004_living.jpg",
+        "https://example.com/prop004_patio.jpg"
+      ],
+      "agent_id": "AGENT001",
+      "list_date": "2024-01-30",
+      "status": "Active",
+      "open_house": {
+        "scheduled": false,
+        "date": null,
+        "time": null
+      }
+    },
+    {
+      "id": "PROP005",
+      "address": "7890 La Sierra Way",
+      "city": "Riverside",
+      "state": "CA",
+      "zip_code": "92505",
+      "area": "La Sierra",
+      "property_type": "Single Family Home",
+      "style": "Traditional",
+      "year_built": 2019,
+      "price": 545000,
+      "bedrooms": 4,
+      "bathrooms": 3,
+      "square_feet": 2400,
+      "lot_size": "0.2 acres",
+      "description": "Beautiful traditional home in growing La Sierra area. Features include formal dining room, family room with fireplace, and large backyard perfect for entertaining.",
+      "features": [
+        "Formal dining room",
+        "Family room with fireplace",
+        "Large backyard",
+        "Updated kitchen",
+        "Central AC",
+        "Good schools nearby"
+      ],
+      "images": [
+        "https://example.com/prop005_front.jpg",
+        "https://example.com/prop005_living.jpg",
+        "https://example.com/prop005_backyard.jpg"
+      ],
+      "agent_id": "AGENT002",
+      "list_date": "2024-02-01",
+      "status": "Active",
+      "open_house": {
+        "scheduled": true,
+        "date": "2024-02-12",
+        "time": "1:00 PM - 4:00 PM"
+      }
+    }
+  ],
+  "total_listings": 5,
+  "price_range": {
+    "min": 395000,
+    "max": 1250000,
+    "average": 679000
+  }
+} 

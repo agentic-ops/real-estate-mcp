@@ -1,0 +1,176 @@
+{
+  "agents": [
+    {
+      "id": "AGENT001",
+      "name": "Sarah Johnson",
+      "title": "Senior Real Estate Agent",
+      "phone": "(951) 555-0101",
+      "email": "sarah.johnson@riversiderealty.com",
+      "photo": "https://example.com/sarah_johnson.jpg",
+      "license_number": "CA-12345678",
+      "years_experience": 12,
+      "specializations": [
+        "First-time homebuyers",
+        "Historic homes",
+        "Family homes",
+        "Downtown Riverside"
+      ],
+      "expertise_areas": [
+        "Downtown Riverside",
+        "Woodcrest",
+        "Arlington Heights"
+      ],
+      "certifications": [
+        "Certified Residential Specialist (CRS)",
+        "Accredited Buyer's Representative (ABR)",
+        "Certified Luxury Home Specialist"
+      ],
+      "languages": ["English", "Spanish"],
+      "bio": "Sarah has been helping families find their dream homes in Riverside for over 12 years. She specializes in historic properties and first-time homebuyers, with deep knowledge of the downtown area and its unique Victorian homes.",
+      "achievements": [
+        "Top Producer 2023",
+        "Million Dollar Club 2022",
+        "Customer Service Excellence Award 2021"
+      ],
+      "recent_sales": [
+        {
+          "address": "2345 Mission Inn Ave",
+          "sale_price": 475000,
+          "sale_date": "2024-01-10",
+          "days_on_market": 12
+        },
+        {
+          "address": "4567 Woodcrest Dr",
+          "sale_price": 680000,
+          "sale_date": "2023-12-15",
+          "days_on_market": 8
+        }
+      ],
+      "client_testimonials": [
+        {
+          "client_name": "Maria Rodriguez",
+          "rating": 5,
+          "comment": "Sarah helped us find the perfect historic home in downtown. Her knowledge of the area and attention to detail made the process smooth and enjoyable."
+        },
+        {
+          "client_name": "John and Lisa Thompson",
+          "rating": 5,
+          "comment": "As first-time buyers, we were nervous about the process. Sarah guided us through every step and found us a beautiful home in Woodcrest."
+        }
+      ]
+    },
+    {
+      "id": "AGENT002",
+      "name": "Michael Chen",
+      "title": "Luxury Real Estate Specialist",
+      "phone": "(951) 555-0102",
+      "email": "michael.chen@riversiderealty.com",
+      "photo": "https://example.com/michael_chen.jpg",
+      "license_number": "CA-87654321",
+      "years_experience": 8,
+      "specializations": [
+        "Luxury homes",
+        "New construction",
+        "Investment properties",
+        "Canyon Crest"
+      ],
+      "expertise_areas": [
+        "Canyon Crest",
+        "La Sierra",
+        "New developments"
+      ],
+      "certifications": [
+        "Certified Luxury Home Specialist",
+        "Certified New Home Specialist",
+        "Certified International Property Specialist (CIPS)"
+      ],
+      "languages": ["English", "Mandarin"],
+      "bio": "Michael specializes in luxury properties and new construction in Riverside's most prestigious neighborhoods. With a background in architecture, he brings unique insights to high-end real estate transactions.",
+      "achievements": [
+        "Luxury Home Specialist of the Year 2023",
+        "Top 10% Producer 2022",
+        "New Construction Expert Award 2021"
+      ],
+      "recent_sales": [
+        {
+          "address": "6789 Canyon Crest Blvd",
+          "sale_price": 1350000,
+          "sale_date": "2024-01-20",
+          "days_on_market": 18
+        },
+        {
+          "address": "1234 La Sierra Way",
+          "sale_price": 580000,
+          "sale_date": "2023-12-20",
+          "days_on_market": 15
+        }
+      ],
+      "client_testimonials": [
+        {
+          "client_name": "Dr. Robert and Jennifer Williams",
+          "rating": 5,
+          "comment": "Michael's expertise in luxury homes is unmatched. He found us the perfect estate in Canyon Crest with all the amenities we wanted."
+        },
+        {
+          "client_name": "David Park",
+          "rating": 5,
+          "comment": "As an investor, I appreciate Michael's market knowledge and ability to identify properties with great potential."
+        }
+      ]
+    },
+    {
+      "id": "AGENT003",
+      "name": "Emily Rodriguez",
+      "title": "Associate Real Estate Agent",
+      "phone": "(951) 555-0103",
+      "email": "emily.rodriguez@riversiderealty.com",
+      "photo": "https://example.com/emily_rodriguez.jpg",
+      "license_number": "CA-11223344",
+      "years_experience": 3,
+      "specializations": [
+        "Condos and townhouses",
+        "Young professionals",
+        "Investment properties",
+        "Arlington Heights"
+      ],
+      "expertise_areas": [
+        "Arlington Heights",
+        "Downtown condos",
+        "Investment opportunities"
+      ],
+      "certifications": [
+        "Certified Condo Specialist",
+        "Accredited Buyer's Representative (ABR)"
+      ],
+      "languages": ["English", "Spanish"],
+      "bio": "Emily focuses on helping young professionals and investors find their perfect property. She has a strong understanding of the condo and townhouse market, particularly in Arlington Heights.",
+      "achievements": [
+        "Rising Star Award 2023",
+        "Top New Agent 2022"
+      ],
+      "recent_sales": [
+        {
+          "address": "5678 Arlington Ave",
+          "sale_price": 410000,
+          "sale_date": "2024-01-25",
+          "days_on_market": 22
+        }
+      ],
+      "client_testimonials": [
+        {
+          "client_name": "Alex Martinez",
+          "rating": 5,
+          "comment": "Emily helped me find a great investment property in Arlington Heights. Her knowledge of the local market was invaluable."
+        }
+      ]
+    }
+  ],
+  "office_info": {
+    "name": "Riverside Realty Group",
+    "address": "1000 Main Street, Riverside, CA 92501",
+    "phone": "(951) 555-0000",
+    "email": "info@riversiderealty.com",
+    "website": "www.riversiderealty.com",
+    "hours": "Monday-Friday: 9AM-6PM, Saturday: 10AM-4PM, Sunday: By appointment"
+  }
+} 

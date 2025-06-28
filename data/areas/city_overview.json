@@ -1,0 +1,77 @@
+{
+  "city_name": "Riverside City",
+  "state": "California",
+  "population": 325000,
+  "median_income": 75000,
+  "school_districts": [
+    {
+      "name": "Riverside Unified School District",
+      "rating": 8.2,
+      "schools": 45
+    },
+    {
+      "name": "Corona-Norco Unified School District", 
+      "rating": 7.8,
+      "schools": 38
+    }
+  ],
+  "areas": [
+    {
+      "name": "Downtown Riverside",
+      "type": "Urban",
+      "description": "Historic downtown area with Victorian homes, cultural attractions, and business district",
+      "median_home_price": 450000,
+      "crime_rate": "Low",
+      "walkability_score": 85,
+      "transit_score": 90,
+      "popular_features": ["Historic architecture", "Riverside Art Museum", "Mission Inn", "Riverside Plaza"]
+    },
+    {
+      "name": "Woodcrest",
+      "type": "Suburban",
+      "description": "Family-friendly neighborhood with excellent schools and parks",
+      "median_home_price": 650000,
+      "crime_rate": "Very Low",
+      "walkability_score": 45,
+      "transit_score": 30,
+      "popular_features": ["Top-rated schools", "Community parks", "Shopping centers", "Family atmosphere"]
+    },
+    {
+      "name": "Canyon Crest",
+      "type": "Upscale Suburban",
+      "description": "Affluent area with luxury homes and mountain views",
+      "median_home_price": 1200000,
+      "crime_rate": "Very Low",
+      "walkability_score": 25,
+      "transit_score": 20,
+      "popular_features": ["Mountain views", "Luxury homes", "Golf courses", "Private schools"]
+    },
+    {
+      "name": "Arlington Heights",
+      "type": "Mixed",
+      "description": "Diverse neighborhood with both residential and commercial areas",
+      "median_home_price": 380000,
+      "crime_rate": "Medium",
+      "walkability_score": 70,
+      "transit_score": 75,
+      "popular_features": ["Diversity", "Local businesses", "Community events", "Affordable housing"]
+    },
+    {
+      "name": "La Sierra",
+      "type": "Suburban",
+      "description": "Growing suburban area with new developments and good schools",
+      "median_home_price": 520000,
+      "crime_rate": "Low",
+      "walkability_score": 40,
+      "transit_score": 35,
+      "popular_features": ["New developments", "Good schools", "Shopping centers", "Family-friendly"]
+    }
+  ],
+  "market_trends": {
+    "current_market": "Seller's Market",
+    "avg_days_on_market": 15,
+    "price_trend": "+8.5% year-over-year",
+    "inventory_level": "Low",
+    "forecast": "Continued growth expected"
+  }
+} 
