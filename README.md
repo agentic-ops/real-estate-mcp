@@ -306,4 +306,20 @@ This project is licensed under the MIT License.
 
 ---
 
+## 📖 Further Reading
+
+For a comprehensive deep dive into the architecture, design principles, and real-world applications of this MCP server, read the detailed blog post:
+
+**[🔌 MCP Servers - Model Context Protocol Implementation](https://edwin.genego.io/ai/mcp-servers)**
+
+The blog post covers:
+- Understanding MCP Servers and their business impact
+- Architecture deep dive with code examples
+- MCP Tools, Prompts, and Resources explained
+- Real-world usage scenarios and implementation patterns
+- Security considerations and best practices
+- Future implications of MCP technology
+
+---
+
 *Built with the Model Context Protocol (MCP) for seamless AI integration* 
