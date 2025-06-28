@@ -266,6 +266,142 @@ curl -X POST http://127.0.0.1:8000/messages/ \
   -d '{"jsonrpc": "2.0", "id": 4, "method": "tools/call", "params": {"name": "match_client_preferences", "arguments": {"client_id": "CLI001"}}}'
 ```
 
+## 🧪 Testing
+
+The project includes a comprehensive test suite covering all components and functionality.
+
+### Test Structure
+
+```
+tests/
+├── conftest.py              # Pytest configuration and shared fixtures
+├── unit/                    # Unit tests for core components
+│   ├── test_utils.py        # RealEstateDataManager and PropertyFilter tests
+│   └── test_*.py            # Additional unit tests
+├── integration/             # Integration tests for MCP components
+│   ├── test_property_tools.py    # Property tools integration tests
+│   ├── test_all_tools.py         # All other tool categories
+│   ├── test_resources.py         # Static and template resources tests
+│   └── test_prompts.py            # Prompt template tests
+└── __init__.py
+```
+
+### Test Categories
+
+#### Unit Tests (`tests/unit/`)
+- **Data Manager Tests**: Core functionality of `RealEstateDataManager`
+- **Filter Tests**: Property filtering logic and edge cases
+- **Utility Functions**: Helper functions and data validation
+
+#### Integration Tests (`tests/integration/`)
+- **Property Tools**: Search, filter, insights, and area-based queries
+- **Agent Tools**: Profile management, performance dashboards
+- **Market Tools**: Market analysis and trend calculations
+- **Client Tools**: Client matching and preference algorithms
+- **Area Tools**: Area intelligence and amenities data
+- **System Tools**: Data refresh and system statistics
+- **Resources**: Static resources and dynamic templates
+- **Prompts**: Template generation and parameter handling
+
+### Running Tests
+
+#### Prerequisites
+```bash
+# Install testing dependencies
+pip install -r requirements.txt
+```
+
+#### Quick Test Commands
+```bash
+# Run all tests
+pytest
+
+# Run with coverage report
+pytest --cov=. --cov-report=html
+
+# Run specific test categories
+pytest tests/unit/                    # Unit tests only
+pytest tests/integration/             # Integration tests only
+pytest tests/integration/test_property_tools.py  # Property tools only
+```
+
+#### Using the Test Runner Script
+```bash
+# Run all tests
+python run_tests.py
+
+# Run specific test types
+python run_tests.py unit              # Unit tests only
+python run_tests.py integration       # Integration tests only
+python run_tests.py property          # Property tools only
+python run_tests.py resources         # Resource tests only
+
+# Run with verbose output and coverage
+python run_tests.py all -v -c
+```
+
+### Test Features
+
+#### Fixtures and Test Data
+- **Isolated Test Environment**: Each test uses temporary data directories
+- **Mock Data**: Consistent test data across all test cases
+- **Shared Fixtures**: Reusable test components in `conftest.py`
+- **Data Manager Mocking**: Isolated testing without file system dependencies
+
+#### Coverage and Reporting
+- **Code Coverage**: Comprehensive coverage reporting with pytest-cov
+- **HTML Reports**: Visual coverage reports in `htmlcov/index.html`
+- **Missing Lines**: Identification of uncovered code paths
+- **Branch Coverage**: Logic branch testing
+
+#### Test Configuration
+- **pytest.ini**: Centralized test configuration
+- **Automatic Discovery**: Tests auto-discovered by naming convention
+- **Parallel Execution**: Support for parallel test execution
+- **Filtering**: Warning filters for clean test output
+
+### Test Data Validation
+
+The test suite validates:
+- ✅ All 30+ tools function correctly with mock and real data
+- ✅ Property filtering logic handles edge cases
+- ✅ Search functionality is case-insensitive and comprehensive
+- ✅ Agent performance calculations are accurate
+- ✅ Market analysis tools process data correctly
+- ✅ Client matching algorithms work as expected
+- ✅ Area intelligence aggregates data properly
+- ✅ Resource endpoints return valid JSON
+- ✅ Prompt templates generate proper instructions
+- ✅ Error handling for missing or invalid data
+- ✅ Data refresh and caching mechanisms
+- ✅ System statistics and summaries
+
+### Continuous Integration
+
+For CI/CD pipelines, use:
+```bash
+# Basic test run
+pytest tests/ --tb=short
+
+# With coverage for CI reporting
+pytest tests/ --cov=. --cov-report=xml --cov-report=term-missing
+
+# Specific test categories for staged testing
+pytest tests/unit/ --tb=short          # Fast unit tests first
+pytest tests/integration/ --tb=short   # Integration tests second
+```
+
+### Writing New Tests
+
+When adding new functionality:
+
+1. **Unit Tests**: Add to `tests/unit/` for core logic
+2. **Integration Tests**: Add to appropriate `tests/integration/test_*.py`
+3. **Use Fixtures**: Leverage existing fixtures in `conftest.py`
+4. **Mock External Dependencies**: Use `unittest.mock` for isolation
+5. **Test Edge Cases**: Include boundary conditions and error scenarios
+6. **Follow Naming Convention**: `test_*.py` files, `Test*` classes, `test_*` methods
+
 ## 🛠️ Development
 
 ### Adding New Tools
@@ -273,16 +409,19 @@ curl -X POST http://127.0.0.1:8000/messages/ \
 2. Add tool function with `@mcp.tool()` decorator
 3. Register in the category's `register_*_tools()` function
 4. Import and call registration in `main.py`
+5. **Add Tests**: Create corresponding tests in `tests/integration/`
 
 ### Adding New Resources
 1. Add to `resources/static_resources.py` for static data
 2. Add to `resources/resource_templates.py` for parameterized resources
 3. Use `@mcp.resource()` decorator with URI pattern
+4. **Add Tests**: Include resource tests in `tests/integration/test_resources.py`
 
 ### Adding New Prompts
 1. Add to `prompts/prompt_templates.py`
 2. Use `@mcp.prompt()` decorator
 3. Include parameter defaults and comprehensive instructions
+4. **Add Tests**: Include prompt tests in `tests/integration/test_prompts.py`
 
 ## 🔄 Benefits of SSE Transport
 
