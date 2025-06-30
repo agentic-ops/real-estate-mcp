@@ -1,1 +1,1 @@
-# Tools package for Real Estate MCP Server 
+# Tools package for Real Estate MCP Server

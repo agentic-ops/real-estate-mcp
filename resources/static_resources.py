@@ -3,13 +3,15 @@ Static resources for the Real Estate MCP Server
 """
 
 import json
+
 from mcp.server.fastmcp import FastMCP
+
 from utils import data_manager
 
 
 def register_static_resources(mcp: FastMCP):
     """Register all static resources with the MCP server"""
-    
+
     @mcp.resource("realestate://all-properties")
     def get_all_properties_resource() -> str:
         """Complete listing of all active properties"""
@@ -37,4 +39,4 @@ def register_static_resources(mcp: FastMCP):
     @mcp.resource("realestate://amenities")
     def get_amenities_resource() -> str:
         """All amenities data including schools, parks, shopping, healthcare"""
-        return json.dumps(data_manager.amenities, indent=2) 
+        return json.dumps(data_manager.amenities, indent=2)

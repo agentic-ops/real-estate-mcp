@@ -21,7 +21,11 @@ real-estate-mcp/
 │   ├── static_resources.py    # Static data resources
 │   └── resource_templates.py  # Dynamic resource templates
 ├── prompts/                   # MCP Prompts (user-controlled templates)
-│   └── prompt_templates.py    # Analysis and reporting prompts
+│   ├── __init__.py            # Central prompt registration
+│   ├── property_prompts.py    # Property analysis and comparison prompts
+│   ├── client_prompts.py      # Client matching and consultation prompts
+│   ├── market_prompts.py      # Market analysis and investment prompts
+│   └── agent_prompts.py       # Agent performance and development prompts
 └── data/                      # Real estate data files
     ├── properties/
     ├── agents/
@@ -37,7 +41,7 @@ real-estate-mcp/
 ### MCP Capabilities
 - **30+ Tools**: Comprehensive real estate operations
 - **10 Resources**: 5 static resources + 5 dynamic resource templates
-- **5 Prompts**: User-controlled analysis templates
+- **11 Prompts**: User-controlled analysis templates across 4 categories
 - **SSE Transport**: Web-compatible Server-Sent Events endpoint
 
 ### Tool Categories
@@ -92,12 +96,26 @@ real-estate-mcp/
 - `realestate://property/{property_id}/insights`: Property insights
 - `realestate://client/{client_id}/matches`: Client property matches
 
-### Prompts
-- **Property Analysis**: Comprehensive property evaluation
-- **Client Matching**: Personalized recommendations
-- **Market Reports**: Area market analysis
-- **Agent Performance**: Performance dashboards
+### Prompts (11 total)
+
+#### Property Prompts (2 prompts)
+- **Property Analysis**: Comprehensive property evaluation and insights
+- **Property Comparison**: Side-by-side property comparison analysis
+
+#### Client Prompts (3 prompts) 
+- **Client Matching**: Personalized property recommendations
+- **Client Consultation**: Structured consultation framework
+- **Client Feedback Analysis**: Search strategy refinement
+
+#### Market Prompts (3 prompts)
+- **Market Reports**: Comprehensive area market analysis
 - **Investment Analysis**: ROI and opportunity assessment
+- **Comparative Market Analysis**: Multi-area comparison
+
+#### Agent Prompts (3 prompts)
+- **Agent Performance**: Performance dashboards and analysis
+- **Agent Marketing Strategy**: Business development and marketing
+- **Agent Training Development**: Skill enhancement and training plans
 
 ## 📦 Installation
 
@@ -301,7 +319,7 @@ tests/
 - **Area Tools**: Area intelligence and amenities data
 - **System Tools**: Data refresh and system statistics
 - **Resources**: Static resources and dynamic templates
-- **Prompts**: Template generation and parameter handling
+- **Prompts**: Template generation and parameter handling (11 prompts across 4 categories)
 
 ### Running Tests
 
@@ -418,10 +436,17 @@ When adding new functionality:
 4. **Add Tests**: Include resource tests in `tests/integration/test_resources.py`
 
 ### Adding New Prompts
-1. Add to `prompts/prompt_templates.py`
-2. Use `@mcp.prompt()` decorator
+1. Choose appropriate category in `prompts/` (property, client, market, or agent)
+2. Add prompt function with `@mcp.prompt()` decorator
 3. Include parameter defaults and comprehensive instructions
-4. **Add Tests**: Include prompt tests in `tests/integration/test_prompts.py`
+4. Register in the category's `register_*_prompts()` function
+5. **Add Tests**: Include prompt tests in `tests/integration/test_prompts.py`
+
+### Adding New Prompt Categories
+1. Create new file in `prompts/` directory (e.g., `prompts/new_category_prompts.py`)
+2. Follow the existing pattern with `register_new_category_prompts(mcp)` function
+3. Import and register in `prompts/__init__.py`
+4. **Add Tests**: Create corresponding test fixtures and test methods
 
 ## 🔄 Benefits of SSE Transport
 

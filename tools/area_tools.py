@@ -3,13 +3,15 @@ Area and amenities MCP tools
 """
 
 import json
+
 from mcp.server.fastmcp import FastMCP
+
 from utils import data_manager
 
 
 def register_area_tools(mcp: FastMCP):
     """Register all area and amenities tools with the MCP server"""
-    
+
     @mcp.tool()
     def get_all_areas() -> str:
         """Get information about all areas in the city"""
@@ -34,10 +36,7 @@ def register_area_tools(mcp: FastMCP):
     def get_area_amenities(area: str) -> str:
         """Get amenities (schools, parks, shopping) for a specific area"""
         amenities = data_manager.get_area_amenities(area)
-        return json.dumps({
-            "area": area,
-            "amenities": amenities
-        }, indent=2)
+        return json.dumps({"area": area, "amenities": amenities}, indent=2)
 
     @mcp.tool()
     def get_schools_data() -> str:
@@ -72,20 +71,14 @@ def register_area_tools(mcp: FastMCP):
         properties = data_manager.get_properties_by_area(area)
         sales = data_manager.get_sales_by_area(area)
         amenities = data_manager.get_area_amenities(area)
-        
+
         report = {
             "area": area,
             "area_info": area_info,
             "market_data": market_data,
-            "active_properties": {
-                "count": len(properties),
-                "properties": properties
-            },
-            "recent_sales": {
-                "count": len(sales),
-                "sales": sales
-            },
-            "amenities": amenities
+            "active_properties": {"count": len(properties), "properties": properties},
+            "recent_sales": {"count": len(sales), "sales": sales},
+            "amenities": amenities,
         }
-        
-        return json.dumps(report, indent=2) 
+
+        return json.dumps(report, indent=2)

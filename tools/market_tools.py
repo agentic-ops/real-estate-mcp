@@ -3,13 +3,15 @@ Market analysis MCP tools
 """
 
 import json
+
 from mcp.server.fastmcp import FastMCP
+
 from utils import data_manager
 
 
 def register_market_tools(mcp: FastMCP):
     """Register all market analysis tools with the MCP server"""
-    
+
     @mcp.tool()
     def get_market_overview() -> str:
         """Get overall market overview and trends"""
@@ -27,10 +29,7 @@ def register_market_tools(mcp: FastMCP):
         """Get market performance data for a specific area"""
         market_data = data_manager.get_area_market_data(area)
         if market_data:
-            return json.dumps({
-                "area": area,
-                "market_data": market_data
-            }, indent=2)
+            return json.dumps({"area": area, "market_data": market_data}, indent=2)
         return f"Market data for area '{area}' not found"
 
     @mcp.tool()
@@ -38,11 +37,10 @@ def register_market_tools(mcp: FastMCP):
         """Compare market data across multiple areas (comma-separated list)"""
         area_list = [area.strip() for area in areas.split(",")]
         comparison = data_manager.compare_areas(area_list)
-        
-        return json.dumps({
-            "areas_compared": area_list,
-            "comparison": comparison
-        }, indent=2)
+
+        return json.dumps(
+            {"areas_compared": area_list, "comparison": comparison}, indent=2
+        )
 
     @mcp.tool()
     def get_investment_opportunities() -> str:
@@ -60,8 +58,6 @@ def register_market_tools(mcp: FastMCP):
     def get_sales_by_area(area: str) -> str:
         """Get recent sales in a specific area"""
         sales = data_manager.get_sales_by_area(area)
-        return json.dumps({
-            "area": area,
-            "sales_count": len(sales),
-            "sales": sales
-        }, indent=2) 
+        return json.dumps(
+            {"area": area, "sales_count": len(sales), "sales": sales}, indent=2
+        )
