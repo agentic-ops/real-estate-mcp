@@ -11,8 +11,13 @@ import asyncio
 from mcp.server.fastmcp import FastMCP
 
 from prompts import register_all_prompts
-from resources.resource_templates import register_resource_templates
-from resources.static_resources import register_static_resources
+from resources import (
+    register_agent_resources,
+    register_client_resources,
+    register_location_resources,
+    register_market_resources,
+    register_property_resources,
+)
 from tools.agent_tools import register_agent_tools
 from tools.area_tools import register_area_tools
 from tools.client_tools import register_client_tools
@@ -39,8 +44,11 @@ def register_all_components():
     register_system_tools(mcp)
 
     # Register all resources
-    register_static_resources(mcp)
-    register_resource_templates(mcp)
+    register_property_resources(mcp)
+    register_agent_resources(mcp)
+    register_market_resources(mcp)
+    register_client_resources(mcp)
+    register_location_resources(mcp)
 
     # Register all prompts
     register_all_prompts(mcp)

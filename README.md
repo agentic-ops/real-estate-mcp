@@ -17,9 +17,12 @@ real-estate-mcp/
 │   ├── client_tools.py        # Client management and matching
 │   ├── area_tools.py          # Area intelligence and amenities
 │   └── system_tools.py        # Data management and system tools
-├── resources/                 # MCP Resources (static and templates)
-│   ├── static_resources.py    # Static data resources
-│   └── resource_templates.py  # Dynamic resource templates
+├── resources/                 # MCP Resources (organized by domain)
+│   ├── property_resources.py  # Property-related resources
+│   ├── agent_resources.py     # Agent-related resources
+│   ├── market_resources.py    # Market analysis resources
+│   ├── client_resources.py    # Client management resources
+│   └── location_resources.py  # Area and amenity resources
 ├── prompts/                   # MCP Prompts (user-controlled templates)
 │   ├── __init__.py            # Central prompt registration
 │   ├── property_prompts.py    # Property analysis and comparison prompts
@@ -121,7 +124,7 @@ real-estate-mcp/
 
 1. **Clone the repository**:
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/agentic-ops/real-estate-mcp.git
    cd real-estate-mcp
    ```
 
@@ -216,17 +219,38 @@ def register_[category]_tools(mcp: FastMCP):
 
 ### Resource Modules
 
-Resources provide direct access to data:
-```python
-@mcp.resource("resource-name")
-def resource_function() -> str:
-    """Resource description"""
-    return json.dumps(data, indent=2)
+Resources are organized by domain for better maintainability:
 
-@mcp.resource("template://path/{param}")
-def template_function(param: str) -> str:
-    """Template resource with parameters"""
-    return json.dumps(filtered_data, indent=2)
+#### Property Resources (`property_resources.py`)
+- Property listings and search results
+- Property insights and market context
+- Area-based property filtering
+
+#### Agent Resources (`agent_resources.py`)
+- Agent profiles and directories
+- Performance dashboards and metrics
+
+#### Market Resources (`market_resources.py`)
+- Market overview and trends
+- Area-specific market analysis
+
+#### Client Resources (`client_resources.py`)
+- Client preference matching
+- Property recommendations
+
+#### Location Resources (`location_resources.py`)
+- Area information and demographics
+- Amenities and local services
+
+Each module follows a consistent pattern:
+```python
+def register_[domain]_resources(mcp: FastMCP):
+    """Register all [domain] resources with the MCP server"""
+    
+    @mcp.resource("realestate://resource-name")
+    def resource_function() -> str:
+        """Resource description"""
+        return json.dumps(data, indent=2)
 ```
 
 ### Prompt Templates
@@ -430,10 +454,11 @@ When adding new functionality:
 5. **Add Tests**: Create corresponding tests in `tests/integration/`
 
 ### Adding New Resources
-1. Add to `resources/static_resources.py` for static data
-2. Add to `resources/resource_templates.py` for parameterized resources
-3. Use `@mcp.resource()` decorator with URI pattern
-4. **Add Tests**: Include resource tests in `tests/integration/test_resources.py`
+1. Choose appropriate domain module in `resources/` (property, agent, market, client, location)
+2. Add resource function with `@mcp.resource()` decorator and URI pattern
+3. Register in the domain's `register_*_resources()` function
+4. Import and call registration in `main.py`
+5. **Add Tests**: Include resource tests in `tests/integration/test_resources.py`
 
 ### Adding New Prompts
 1. Choose appropriate category in `prompts/` (property, client, market, or agent)
