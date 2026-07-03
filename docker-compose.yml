@@ -1,0 +1,28 @@
+# Optional Docker Compose setup for the Real Estate MCP Server.
+#
+#   docker compose up --build
+#
+# The server is exposed over SSE at http://localhost:8000/sse.
+# Optional live integrations are disabled by default; enable them by
+# setting the corresponding environment variables (for example in a
+# .env file placed next to this compose file).
+services:
+  real-estate-mcp:
+    build: .
+    image: real-estate-mcp:latest
+    ports:
+      - "8000:8000"
+    environment:
+      HOST: "0.0.0.0"
+      PORT: "8000"
+      MCP_TRANSPORT: "sse"
+      LOG_LEVEL: "INFO"
+
+      # --- Census (free, preferred for demographics) ---
+      CENSUS_ENABLED: "${CENSUS_ENABLED:-false}"
+      CENSUS_API_KEY: "${CENSUS_API_KEY:-}"
+
+      # --- RentCast (metered; may incur costs; disabled by default) ---
+      RENTCAST_ENABLED: "${RENTCAST_ENABLED:-false}"
+      RENTCAST_API_KEY: "${RENTCAST_API_KEY:-}"
+    restart: unless-stopped
