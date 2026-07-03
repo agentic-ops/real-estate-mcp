@@ -8,7 +8,6 @@ from unittest.mock import Mock, patch
 import pytest
 
 from tools.property_tools import register_property_tools
-from utils import data_manager
 
 
 class TestPropertyTools:
