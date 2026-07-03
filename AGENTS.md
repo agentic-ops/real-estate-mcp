@@ -47,6 +47,10 @@ checks.
   `status()` methods for the safe pattern.
 - Preserve v1 tool names and resource URIs; `tests/integration/test_server.py`
   guards backward compatibility.
+- **Licensing is intentional:** this project is AGPL-3.0 (see `LICENSE`) with a
+  commercial-license / integration-support path via `edwin@genego.io`. Do not
+  relicense (e.g. back to MIT) or remove the "Integration & development
+  support" section without explicit maintainer direction.
 
 ## Cursor Cloud specific instructions
 
