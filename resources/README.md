@@ -16,6 +16,17 @@ Each resource module is designed as an independent component that can be:
 
 ## Resource Modules
 
+### `config_resources.py`
+Always-on server configuration (registered regardless of feature flags):
+- `realestate://server-config` - Enabled tool categories, their environment
+  variable names, and data statistics
+
+### `integration_resources.py`
+Optional live-integration status (registered when the `integrations` category
+is enabled):
+- `realestate://integrations/status` - Enabled/configured state for the
+  Census and RentCast adapters (never returns API keys)
+
 ### `property_resources.py`
 Property-related data access:
 - `realestate://all-properties` - Complete property listings
@@ -43,24 +54,19 @@ Geographic and amenity information:
 
 ## Usage
 
-Resources are automatically registered when the MCP server starts. Each module exports a registration function that adds its resources to the server:
+Resources are registered when the MCP server starts. The package exposes a
+single entry point, `register_all_resources(mcp)`, which registers the
+always-on config resource plus every enabled domain's resources (gated by the
+same `REALESTATE_MCP_ENABLE_*` feature flags as the tools):
 
 ```python
-from resources import (
-    register_property_resources,
-    register_agent_resources,
-    register_market_resources,
-    register_client_resources,
-    register_location_resources
-)
+from resources import register_all_resources
 
-# Register all resources with the MCP server
-register_property_resources(mcp)
-register_agent_resources(mcp)
-register_market_resources(mcp)
-register_client_resources(mcp)
-register_location_resources(mcp)
+register_all_resources(mcp)
 ```
+
+Individual `register_*_resources(mcp)` functions remain available for
+fine-grained use.
 
 ## Resource URI Patterns
 

@@ -40,8 +40,8 @@ def register_property_resources(mcp: FastMCP):
                 {"error": f"Property with ID {property_id} not found"}, indent=2
             )
 
-        area = prop.get("area")
-        agent = data_manager.get_agent_by_id(prop.get("agent_id"))
+        area = prop.get("area", "")
+        agent = data_manager.get_agent_by_id(prop.get("agent_id", ""))
         area_info = data_manager.get_area_info(area)
         area_market = data_manager.get_area_market_data(area)
         comparable_sales = data_manager.get_sales_by_area(area)
