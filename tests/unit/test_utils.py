@@ -2,13 +2,10 @@
 Unit tests for utils.py - RealEstateDataManager and PropertyFilter
 """
 
-import json
 import os
 from unittest.mock import mock_open, patch
 
-import pytest
-
-from utils import PropertyFilter, RealEstateDataManager
+from utils import PropertyFilter
 
 
 class TestPropertyFilter:

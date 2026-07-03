@@ -1,0 +1,46 @@
+[project]
+name = "real-estate-mcp"
+version = "2.0.0"
+description = "Real Estate MCP Server - comprehensive property, market, valuation, and mortgage workflow tools over the Model Context Protocol."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "AGPL-3.0-or-later" }
+dependencies = [
+    "mcp[cli]>=1.28.0",
+    "pydantic>=2.11",
+    "httpx>=0.28",
+    "python-docx>=1.1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.23",
+    "pytest-cov>=5.0",
+    "pytest-mock>=3.11",
+    "black>=24.0",
+    "flake8>=7.0",
+    "mypy>=1.8",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+addopts = "-ra"
+filterwarnings = [
+    "ignore::DeprecationWarning",
+    "ignore::PendingDeprecationWarning",
+]
+
+[tool.black]
+line-length = 88
+target-version = ["py310", "py311", "py312"]
+
+[tool.mypy]
+python_version = "3.12"
+ignore_missing_imports = true
+warn_unused_ignores = false
+no_implicit_optional = false
+disable_error_code = ["misc"]
+exclude = ["tests/"]

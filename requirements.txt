@@ -1,5 +1,28 @@
-mcp==1.16.0
-pytest>=7.4.0
-pytest-asyncio>=0.21.0
-pytest-cov>=4.1.0
-pytest-mock>=3.11.0
+# Real Estate MCP Server dependencies
+# Install with: pip install -r requirements.txt
+
+# --- Core (runtime) ---
+# The official Model Context Protocol SDK, including FastMCP and the
+# `mcp` CLI (which bundles the MCP Inspector integration).
+mcp[cli]>=1.28.0
+
+# Pydantic 2.10 breaks FastMCP tool return-type wrapping; 2.11+ required.
+pydantic>=2.11
+
+# HTTP client for the optional Census / property-data integrations
+# (also pulled in transitively by mcp; pinned here as a direct dep).
+httpx>=0.28
+
+# Listing-document ingestion and analysis report export (.docx)
+python-docx>=1.1
+
+# --- Development & testing ---
+pytest>=8.0
+pytest-asyncio>=0.23
+pytest-cov>=5.0
+pytest-mock>=3.11
+
+# --- Linting & type checking ---
+black>=24.0
+flake8>=7.0
+mypy>=1.8

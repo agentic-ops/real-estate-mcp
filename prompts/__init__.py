@@ -9,6 +9,7 @@ from mcp.server.fastmcp import FastMCP
 
 from .agent_prompts import register_agent_prompts
 from .client_prompts import register_client_prompts
+from .finance_prompts import register_finance_prompts
 from .market_prompts import register_market_prompts
 from .property_prompts import register_property_prompts
 
@@ -32,6 +33,8 @@ def register_all_prompts(mcp: FastMCP):
     register_client_prompts(mcp)
     register_market_prompts(mcp)
     register_agent_prompts(mcp)
+    register_finance_prompts(mcp)
+
 
 # Export the main registration function
 __all__ = ["register_all_prompts"]

@@ -4,11 +4,27 @@ Comprehensive utilities for managing and querying real estate data
 """
 
 import json
+import logging
 import os
 import sys
 from dataclasses import dataclass
+from functools import lru_cache
 from pathlib import Path
 from typing import Any, Dict, List, Optional
+
+logger = logging.getLogger("real_estate_mcp.utils")
+
+
+def audit(event: str, **details: Any) -> None:
+    """Emit a structured audit log entry for provenance.
+
+    Centralises audit logging so tools and resources can record a
+    traceable record of every operation without duplicating formatting
+    logic. Never pass secrets (API tokens/passwords) into ``details``.
+    """
+
+    payload = " ".join(f"{key}={value!r}" for key, value in details.items())
+    logger.info("audit event=%s %s", event, payload)
 
 
 @dataclass
@@ -31,14 +47,16 @@ class PropertyFilter:
 class RealEstateDataManager:
     """Centralized manager for all real estate data"""
 
-    def __init__(self, data_dir: str = None):
+    def __init__(self, data_dir: Optional[str] = None):
         # Use absolute path relative to this file's location
         if data_dir is None:
             # Get the directory where utils.py is located
             base_dir = Path(__file__).parent.resolve()
-            data_dir = base_dir / "data"
-        self.data_dir = str(data_dir)
-        self._cache = {}
+            resolved_dir: os.PathLike[str] | str = base_dir / "data"
+        else:
+            resolved_dir = data_dir
+        self.data_dir = str(resolved_dir)
+        self._cache: Dict[str, Any] = {}
         self._load_all_data()
 
     def _load_json_file(self, filepath: str) -> Dict[str, Any]:
@@ -84,6 +102,17 @@ class RealEstateDataManager:
         """Refresh all cached data"""
         self._cache.clear()
         self._load_all_data()
+        audit("data_reload", data_dir=self.data_dir)
+
+    def stats(self) -> Dict[str, int]:
+        """Return counts of every loaded data collection (diagnostics)."""
+        return {
+            "properties": len(self.get_all_properties()),
+            "agents": len(self.get_all_agents()),
+            "clients": len(self.get_all_clients()),
+            "recent_sales": len(self.get_recent_sales()),
+            "areas": len(self.get_all_areas()),
+        }
 
     # Property Operations
     def get_all_properties(self) -> List[Dict[str, Any]]:
@@ -365,7 +394,7 @@ class RealEstateDataManager:
 
     def get_area_amenities(self, area: str) -> Dict[str, Any]:
         """Get all amenities for a specific area"""
-        amenities = {}
+        amenities: Dict[str, Any] = {}
 
         # Schools
         amenities["schools"] = self.get_schools_by_area(area)
@@ -485,8 +514,8 @@ class RealEstateDataManager:
         if not prop:
             return {}
 
-        area = prop.get("area")
-        agent = self.get_agent_by_id(prop.get("agent_id"))
+        area = prop.get("area", "")
+        agent = self.get_agent_by_id(prop.get("agent_id", ""))
 
         return {
             "property": prop,
@@ -498,5 +527,16 @@ class RealEstateDataManager:
         }
 
 
-# Global instance
+# Global instance (retained for backward compatibility with existing imports).
 data_manager = RealEstateDataManager()
+
+
+@lru_cache(maxsize=1)
+def get_data_manager() -> RealEstateDataManager:
+    """Return the process-wide :class:`RealEstateDataManager` singleton.
+
+    New modules should prefer this accessor over importing the module-level
+    ``data_manager`` global; both return the same underlying instance.
+    """
+
+    return data_manager

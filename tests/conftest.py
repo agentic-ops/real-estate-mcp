@@ -6,12 +6,39 @@ import json
 import os
 import tempfile
 from typing import Any, Dict
-from unittest.mock import Mock, patch
+from unittest.mock import Mock
 
 import pytest
 from mcp.server.fastmcp import FastMCP
 
+from main import create_server
 from utils import PropertyFilter, RealEstateDataManager
+
+
+@pytest.fixture(scope="session")
+def mcp_server():
+    """A fully-registered FastMCP server instance for integration tests."""
+
+    return create_server()
+
+
+async def call_tool_json(server, name: str, arguments: Dict[str, Any]) -> Any:
+    """Call an MCP tool and decode its JSON string payload."""
+
+    result = await server.call_tool(name, arguments)
+    structured = result[1] if isinstance(result, tuple) else result
+    if isinstance(structured, dict) and "result" in structured:
+        return json.loads(structured["result"])
+    return structured
+
+
+async def read_resource_json(server, uri: str) -> Any:
+    """Read an MCP resource and decode its JSON string payload."""
+
+    contents = await server.read_resource(uri)
+    first = list(contents)[0]
+    text = getattr(first, "content", None) or getattr(first, "text", first)
+    return json.loads(text)
 
 
 @pytest.fixture

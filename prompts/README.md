@@ -58,6 +58,14 @@ Agent performance and business development workflows:
 - Business development strategies
 - Client relationship management guidance
 
+### Finance Prompts (`finance_prompts.py`)
+Mortgage/affordability and valuation workflows (tie into the mortgage and
+valuation tool categories):
+- **`mortgage_planning_prompt`** - Affordability, payment, amortization, and
+  refinance plan for a prospective buyer
+- **`valuation_prompt`** - Comparable-based valuation plus an investment read
+  for a specific listing
+
 ## How Prompts Work
 
 1. **Discovery**: Clients discover available prompts via `prompts/list` requests

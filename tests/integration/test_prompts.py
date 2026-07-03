@@ -280,6 +280,8 @@ class TestPromptTemplates:
             "agent_performance_prompt",
             "agent_marketing_strategy_prompt",
             "agent_training_development_prompt",
+            "mortgage_planning_prompt",
+            "valuation_prompt",
         ]
 
         for prompt_name in expected_prompts:
@@ -299,6 +301,8 @@ class TestPromptTemplates:
             ("agent_performance_prompt", []),
             ("agent_marketing_strategy_prompt", []),
             ("agent_training_development_prompt", []),
+            ("mortgage_planning_prompt", []),
+            ("valuation_prompt", []),
         ]
 
         for prompt_name, args in prompts_to_test:

@@ -32,6 +32,11 @@ env/
 htmlcov/
 *.cover
 .hypothesis/
+.mypy_cache/
+
+# Local SQLite analysis queue database
+*.db
+real_estate_mcp_analysis.db
 
 # IDEs
 .vscode/

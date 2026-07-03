@@ -60,7 +60,7 @@ Please create personalized property recommendations for client {client_id}:
 
 ### 🏆 Success Factors:
 - **Budget Alignment**: Properties within financial comfort zone
-- **Location Fit**: Commute, amenities, and lifestyle compatibility  
+- **Location Fit**: Commute, amenities, and lifestyle compatibility
 - **Feature Match**: Must-have features and preferences satisfied
 - **Market Timing**: Optimal timing for purchase decisions
 - **Investment Value**: Long-term value and appreciation potential

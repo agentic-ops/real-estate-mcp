@@ -1,96 +1,133 @@
-"""
-Real Estate MCP Server
+"""Real Estate MCP Server -- main entry point.
 
-A comprehensive Model Context Protocol server for real estate data management.
-Provides tools, resources, and prompts for property listings, agent management,
-market analysis, client relationships, and area intelligence.
+A comprehensive Model Context Protocol server for real estate data
+management. Initializes a FastMCP server, registers all enabled tools,
+resources, and prompts, and runs the selected transport. A module-level
+``mcp`` instance is exposed so the MCP Inspector / CLI can load it directly::
+
+    mcp dev main.py:mcp
+
+Transport, host, and port are configurable via CLI flags or the
+``MCP_TRANSPORT`` / ``HOST`` / ``PORT`` environment variables. The default
+transport is ``stdio`` (for Claude Desktop compatibility); pass ``sse`` (or
+``--transport sse``) for remote/web access. The legacy ``python main.py sse``
+invocation is still supported.
 """
 
-import asyncio
+from __future__ import annotations
+
+import argparse
+import logging
+import os
 import sys
+from typing import Literal, cast
 
 from mcp.server.fastmcp import FastMCP
 
+from feature_flags import enabled_categories
 from prompts import register_all_prompts
-from resources import (
-    register_agent_resources,
-    register_client_resources,
-    register_location_resources,
-    register_market_resources,
-    register_property_resources,
+from resources import register_all_resources
+from tools import register_all_tools
+from utils import audit, get_data_manager
+
+SERVER_NAME = "Real Estate MCP Server"
+SERVER_VERSION = "2.0.0"
+INSTRUCTIONS = (
+    "Comprehensive real estate workflow tools for property search and "
+    "insights, agent and client management, market and area intelligence, "
+    "mortgage/affordability math, comparable-based valuation, and investment "
+    "analysis. Operates on local seed data with optional opt-in live "
+    "integrations. Provides workflow augmentation, not financial or legal advice."
 )
-from tools.agent_tools import register_agent_tools
-from tools.area_tools import register_area_tools
-from tools.client_tools import register_client_tools
-from tools.market_tools import register_market_tools
+TRANSPORTS = ["stdio", "sse", "streamable-http"]
 
-# Import all component registration functions
-from tools.property_tools import register_property_tools
-from tools.system_tools import register_system_tools
-from utils import data_manager
-
-# Create the FastMCP server
-mcp = FastMCP("Real Estate MCP Server")
+logging.basicConfig(
+    level=os.environ.get("LOG_LEVEL", "INFO"),
+    format="%(asctime)s %(name)s %(levelname)s %(message)s",
+    handlers=[logging.StreamHandler(sys.stderr)],
+)
+logger = logging.getLogger("real_estate_mcp")
 
 
-def register_all_components():
-    """Register all tools, resources, and prompts with the MCP server"""
+def create_server(host: str = "127.0.0.1", port: int = 8000) -> FastMCP:
+    """Build and fully configure the FastMCP server instance."""
 
-    # Register all tool categories
-    register_property_tools(mcp)
-    register_agent_tools(mcp)
-    register_market_tools(mcp)
-    register_client_tools(mcp)
-    register_area_tools(mcp)
-    register_system_tools(mcp)
-
-    # Register all resources
-    register_property_resources(mcp)
-    register_agent_resources(mcp)
-    register_market_resources(mcp)
-    register_client_resources(mcp)
-    register_location_resources(mcp)
-
-    # Register all prompts
-    register_all_prompts(mcp)
-
-
-async def main():
-    """Main server function with transport selection"""
-    import logging
-    
-    logging.basicConfig(
-        level=logging.INFO,
-        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-        handlers=[logging.StreamHandler(sys.stderr)]
+    server = FastMCP(
+        SERVER_NAME,
+        instructions=INSTRUCTIONS,
+        host=host,
+        port=port,
     )
-    logger = logging.getLogger(__name__)
-    
-    # Register all components
-    register_all_components()
+    register_all_tools(server)
+    register_all_resources(server)
+    register_all_prompts(server)
 
-    # Log startup information to stderr
-    logger.info("Real Estate MCP Server Starting...")
-    logger.info(f"Loaded {len(data_manager.get_all_properties())} properties")
-    logger.info(f"Loaded {len(data_manager.get_all_agents())} agents")
-    logger.info(f"Loaded {len(data_manager.get_all_clients())} clients")
-    logger.info(f"Loaded {len(data_manager.get_recent_sales())} recent sales")
-    logger.info(f"Loaded {len(data_manager.get_all_areas())} areas")
+    stats = get_data_manager().stats()
+    categories = enabled_categories()
+    logger.info("%s v%s starting", SERVER_NAME, SERVER_VERSION)
+    logger.info("Loaded real estate data: %s", stats)
+    logger.info("Enabled tool categories: %s", categories)
+    audit(
+        "server_initialized",
+        version=SERVER_VERSION,
+        enabled_categories=categories,
+        **stats,
+    )
+    return server
 
-    # Determine transport mode from command line arguments
-    transport = "stdio"  # Default to stdio for Claude Desktop compatibility
-    if len(sys.argv) > 1:
-        transport = sys.argv[1].lower()
 
-    if transport == "sse":
-        # Run with SSE transport for remote/web access
-        logger.info("Running with SSE transport on http://127.0.0.1:8000/sse")
-        await mcp.run_sse_async()
-    else:
-        # Run with STDIO transport for Claude Desktop
-        logger.info("Running with STDIO transport")
-        await mcp.run_stdio_async()
+# Module-level instance for `mcp dev main.py:mcp` and imports.
+mcp = create_server(
+    host=os.environ.get("HOST", "127.0.0.1"),
+    port=int(os.environ.get("PORT", "8000")),
+)
+
+
+def _resolve_transport(args: argparse.Namespace) -> str:
+    """Resolve the transport from --transport, a positional arg, or env."""
+
+    return (
+        args.transport
+        or args.transport_positional
+        or os.environ.get("MCP_TRANSPORT")
+        or "stdio"
+    )
+
+
+def main() -> None:
+    """Parse arguments and run the Real Estate MCP Server."""
+
+    parser = argparse.ArgumentParser(description=f"{SERVER_NAME} v{SERVER_VERSION}")
+    parser.add_argument(
+        "transport_positional",
+        nargs="?",
+        choices=TRANSPORTS,
+        default=None,
+        help="Transport protocol (legacy positional form, e.g. 'sse').",
+    )
+    parser.add_argument(
+        "--transport",
+        choices=TRANSPORTS,
+        default=None,
+        help="Transport protocol (overrides positional and MCP_TRANSPORT).",
+    )
+    parser.add_argument("--host", default=os.environ.get("HOST", "127.0.0.1"))
+    parser.add_argument("--port", type=int, default=int(os.environ.get("PORT", "8000")))
+    args = parser.parse_args()
+
+    transport = _resolve_transport(args)
+    mcp.settings.host = args.host
+    mcp.settings.port = args.port
+
+    logger.info(
+        "Running %s (transport=%s, host=%s, port=%s)",
+        SERVER_NAME,
+        transport,
+        args.host,
+        args.port,
+    )
+    mcp.run(transport=cast(Literal["stdio", "sse", "streamable-http"], transport))
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    main()

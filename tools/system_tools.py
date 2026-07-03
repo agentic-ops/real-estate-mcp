@@ -6,7 +6,8 @@ import json
 
 from mcp.server.fastmcp import FastMCP
 
-from utils import data_manager
+from feature_flags import enabled_categories
+from utils import audit, data_manager
 
 
 def register_system_tools(mcp: FastMCP):
@@ -15,8 +16,23 @@ def register_system_tools(mcp: FastMCP):
     @mcp.tool()
     def refresh_data() -> str:
         """Refresh all cached data from files"""
+        audit("refresh_data")
         data_manager.refresh_data()
         return "Data cache refreshed successfully"
+
+    @mcp.tool()
+    def get_server_info() -> str:
+        """Get server version, data statistics, and enabled tool categories."""
+        audit("get_server_info")
+        return json.dumps(
+            {
+                "server": "Real Estate MCP Server",
+                "version": "2.0.0",
+                "data_stats": data_manager.stats(),
+                "enabled_categories": enabled_categories(),
+            },
+            indent=2,
+        )
 
     @mcp.tool()
     def get_data_summary() -> str:
