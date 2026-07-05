@@ -182,6 +182,7 @@ class TestStatusNeverLeaksSecrets:
         status = CensusClient(settings).status()
         assert "secret-key" not in str(status)
         assert status["has_api_key"] is True
+        assert status["configured"] is True
 
     def test_walkscore_status_hides_key(self):
         settings = WalkScoreSettings(enabled=True, api_key="ws-secret")
@@ -222,9 +223,25 @@ class TestStatusNeverLeaksSecrets:
 
 
 class TestEnabledWithMock:
+    def test_census_requires_key(self):
+        """Census now requires a key for every request (verified live);
+        without one, the client must not attempt a network call."""
+
+        def handler(request):  # pragma: no cover - must never run
+            raise AssertionError("network call attempted without a key")
+
+        client = CensusClient(
+            CensusSettings(enabled=True, api_key=None),
+            http_client=_mock_client(handler),
+        )
+        result = client.demographics("06")
+        assert "CENSUS_API_KEY" in result["missing_settings"]
+        assert result["results"] == []
+
     def test_census_parses_rows(self):
         def handler(request):
             assert "census.gov" in str(request.url)
+            assert request.url.params.get("key") == "censuskey"
             payload = [
                 ["NAME", "B01003_001E", "B19013_001E", "state"],
                 ["California", "39000000", "84000", "06"],
@@ -232,7 +249,8 @@ class TestEnabledWithMock:
             return httpx.Response(200, json=payload)
 
         client = CensusClient(
-            CensusSettings(enabled=True), http_client=_mock_client(handler)
+            CensusSettings(enabled=True, api_key="censuskey"),
+            http_client=_mock_client(handler),
         )
         result = client.demographics("06")
         assert result["enabled"] is True

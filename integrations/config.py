@@ -51,11 +51,14 @@ def _opt_env(name: str) -> Optional[str]:
 
 @dataclass
 class CensusSettings:
-    """U.S. Census Bureau API feature flag + optional key.
+    """U.S. Census Bureau API feature flag + credentials.
 
-    The Census API is free. An API key is optional (it raises rate limits)
-    so this integration is considered "configured" even without one. It is
-    still off by default so forks opt in explicitly.
+    The Census API is free, but as of Census's own developer docs
+    ("All data queries to the Census Data API now require an API key" --
+    verified live 2026-07-05, every keyless request now 302s to
+    missing_key.html), a key is effectively mandatory, not optional as it
+    was historically. It is still off by default so forks opt in
+    explicitly.
     """
 
     enabled: bool = False
@@ -74,11 +77,10 @@ class CensusSettings:
 
     @property
     def configured(self) -> bool:
-        # The Census API works without a key (rate-limited).
-        return True
+        return bool(self.api_key)
 
     def missing_settings(self) -> List[str]:
-        return []
+        return [] if self.api_key else ["CENSUS_API_KEY"]
 
 
 @dataclass

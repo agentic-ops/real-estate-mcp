@@ -336,7 +336,7 @@ metadata — **credentials are never echoed back**.
 
 | Source | Cost | Enable flag | Credentials | Tool(s) |
 |---|---|---|---|---|
-| [Census Bureau](https://api.census.gov/data/key_signup.html) | Free (rate-limited) | `CENSUS_ENABLED` | `CENSUS_API_KEY` (optional) | `get_live_demographics` |
+| [Census Bureau](https://api.census.gov/data/key_signup.html) | Free (key required) | `CENSUS_ENABLED` | `CENSUS_API_KEY` (required) | `get_live_demographics` |
 | [Walk Score](https://www.walkscore.com/professional/api.php) | Free up to 5,000 calls/day | `WALKSCORE_ENABLED` | `WALKSCORE_API_KEY` (required) | `get_live_walk_score` |
 | [FEMA NFHL](https://hazards.fema.gov/arcgis/rest/services/public/NFHL/MapServer) | Free (keyless) | `FEMA_ENABLED` | none | `get_live_flood_zone` |
 | [FRED](https://fredaccount.stlouisfed.org/apikeys) | Free | `FRED_ENABLED` | `FRED_API_KEY` (required) | `get_live_mortgage_rate` |
@@ -349,12 +349,14 @@ metadata — **credentials are never echoed back**.
 ### Free sources
 
 Census, Walk Score, FEMA, FRED, FBI Crime Data, EPA, and NOAA are all free.
-Some (Walk Score, FRED, FBI Crime Data) still require a free API key to raise
-rate limits or authenticate; FEMA, EPA, and NOAA are fully keyless.
+Most (Census, Walk Score, FRED, FBI Crime Data) require a free API key to
+authenticate or raise rate limits -- Census in particular now **rejects every
+keyless request** (verified live; this changed from its historical
+"optional key" policy). FEMA, EPA, and NOAA are fully keyless.
 
 ```bash
 export CENSUS_ENABLED=true
-# export CENSUS_API_KEY=...       # optional; raises rate limits
+export CENSUS_API_KEY="your-key-here"   # required -- Census now rejects keyless requests
 
 export WALKSCORE_ENABLED=true
 export WALKSCORE_API_KEY="your-key-here"
