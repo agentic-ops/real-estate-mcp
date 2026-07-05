@@ -8,6 +8,13 @@ Disabled by default; when disabled it returns a structured status payload
 instead of making any network call.
 
 API reference: https://www.weather.gov/documentation/services-web-api
+
+IMPORTANT (verified live 2026-07-05): ``/points/{lat},{lon}`` requires
+coordinates rounded to 4 decimal places -- higher precision (e.g. a raw
+GPS reading) gets a **301 redirect** to the rounded form. ``httpx.Client``
+does not follow redirects by default, so an unrounded coordinate would
+otherwise fail with a confusing "Redirect response" error. This adapter
+rounds to 4 decimals before requesting.
 """
 
 from __future__ import annotations
@@ -69,10 +76,15 @@ class NoaaClient:
             }
 
         headers = {"User-Agent": self.settings.contact}
+        # NWS requires <= 4 decimal places on /points; anything more precise
+        # 301-redirects to the rounded form, which httpx won't follow by
+        # default.
+        rounded_lat, rounded_lon = round(lat, 4), round(lon, 4)
         try:
             client = self._get_client()
             points_response = client.get(
-                f"{self.settings.base_url}/points/{lat},{lon}", headers=headers
+                f"{self.settings.base_url}/points/{rounded_lat},{rounded_lon}",
+                headers=headers,
             )
             points_response.raise_for_status()
             points_payload = points_response.json()

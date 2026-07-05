@@ -79,16 +79,18 @@ to what the code sends and parses. Findings:
 | FRED | Yes | Confirmed correct as implemented: endpoint, required params (`series_id`, `api_key`, `file_type=json`), and response shape (`observations[].{date,value}`) all match a live request (verified error path with an unregistered key). |
 | FBI Crime Data | Yes | **Bug found & fixed:** the legacy `.../sapi/api/summarized/...` path 404s; the live service is under `.../cde/summarized/...`. `from`/`to` query params (format `MM-YYYY`) are **required**, not optional -- the adapter now defaults to the trailing 12 full months when not supplied. The response is also **not** a flat `results` list as originally assumed; it nests monthly figures under `offenses.{actuals,rates}` keyed by category label. The adapter now flattens this into a tabular `results` list. Verified against a real state query. |
 | EPA Envirofacts | Yes | Confirmed correct: the `efservice` REST path (state-filtered TRI facility query) is still live and returns real records, even though EPA's docs now foreground the newer `dmapservice` GraphQL-like API as primary. |
-| NOAA/NWS | Yes | Confirmed correct end-to-end: `/points/{lat},{lon}` &rarr; `properties.forecast` &rarr; `properties.periods` round-trip verified against a live coordinate. |
+| NOAA/NWS | Yes | **Bug found & fixed:** `/points/{lat},{lon}` requires coordinates rounded to 4 decimal places -- a raw, full-precision GPS coordinate (the common case) gets a **301 redirect** to the rounded form, which `httpx.Client` does not follow by default, causing a confusing failure. The adapter now rounds before requesting. `properties.forecast` &rarr; `properties.periods` round-trip otherwise verified correct against a live coordinate. |
 | RentCast | Yes | Confirmed fully correct against RentCast's official OpenAPI reference: base URL, the `/properties` path, `address`/`limit` query params, the `X-Api-Key` auth header, and the documented response schema (a bare JSON array of property objects, matching `payload if isinstance(payload, list) ...`). A live request with a bad key returned `401` (i.e. reached the real endpoint and auth was checked); full success-path parsing was cross-checked against RentCast's documented example response since no real key is available in this environment. |
 | Zillow | No (enterprise-gated) | Zillow/Bridge access requires an approved paid license; there is no key available to test against. Fixed a confirmed **path bug** (missing `/zestimates` resource segment) found by reading Bridge's own platform docs, and now sends both the documented `Authorization: Bearer` header and `access_token` query-param fallback. The exact response envelope (`bundle` vs. `value` vs. a bare list) could **not** be confirmed live -- the adapter checks all three, but this remains unverified until tested against a real Bridge account. |
 
 Takeaway: 7 of 9 adapters (Census, Walk Score, FEMA, FRED, FBI Crime Data,
 EPA, NOAA) were checked end-to-end against live traffic, and RentCast was
 fully confirmed against its official API reference plus a live auth check.
-Four real bugs were found and fixed as a result: two wrong endpoint paths
+Five real bugs were found and fixed as a result: two wrong endpoint paths
 (FEMA, FBI Crime Data), one silent-failure bug (Walk Score reports HTTP 200
-even on auth/quota errors), and one stale assumption (Census now mandates an
-API key it previously treated as optional). Only Zillow could not be fully
-verified, because it requires a paid, approval-gated account with no
-available test credentials.
+even on auth/quota errors), one stale assumption (Census now mandates an
+API key it previously treated as optional), and one coordinate-precision
+redirect bug (NOAA 301-redirects full-precision GPS coordinates, which
+`httpx` doesn't follow by default). Only Zillow could not be fully verified,
+because it requires a paid, approval-gated account with no available test
+credentials.

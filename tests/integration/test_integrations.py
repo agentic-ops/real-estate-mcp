@@ -401,6 +401,9 @@ class TestEnabledWithMock:
         def handler(request):
             if "/points/" in str(request.url):
                 assert request.headers.get("User-Agent")
+                # NWS 4-decimal-place requirement: a raw, full-precision
+                # coordinate must be rounded before it reaches the URL.
+                assert "/points/33.9827,-117.3731" in str(request.url)
                 return httpx.Response(
                     200,
                     json={
@@ -419,7 +422,7 @@ class TestEnabledWithMock:
         client = NoaaClient(
             NoaaSettings(enabled=True), http_client=_mock_client(handler)
         )
-        result = client.forecast(38.8894, -77.0352)
+        result = client.forecast(33.982735, -117.373137)
         assert result["enabled"] is True
         assert result["result_count"] == 1
         assert result["results"][0]["name"] == "Today"
