@@ -23,6 +23,7 @@ financial, legal, or appraisal advice.
 - [📄 Listing document ingestion & report export](#-listing-document-ingestion--report-export)
 - [📥 Batch analysis via the async queue](#-batch-analysis-via-the-async-queue)
 - [🔬 Deep property analysis via MCP sampling](#-deep-property-analysis-via-mcp-sampling)
+- [🔌 Live data enrichment via optional integrations](#-live-data-enrichment-via-optional-integrations)
 - [🔄 Workflow summary](#-workflow-summary)
 
 ---
@@ -96,7 +97,7 @@ property — including an amortization snapshot."
 {
   "method": "tools/call",
   "params": {
-    "name": "generate_amortization_schedule",
+    "name": "get_amortization_schedule",
     "arguments": {
       "principal": 500000,
       "annual_rate_pct": 6.5,
@@ -107,18 +108,18 @@ property — including an amortization snapshot."
 }
 ```
 
-**Tool Call 5 — compare 15yr vs 30yr:**
+**Tool Call 5 — compare 15yr vs 30yr (no dedicated "compare scenarios" tool
+exists, so the assistant calls `calculate_mortgage_payment` a second time
+with the 15-year terms and compares the two results itself):**
 ```json
 {
   "method": "tools/call",
   "params": {
-    "name": "compare_loan_scenarios",
+    "name": "calculate_mortgage_payment",
     "arguments": {
       "principal": 500000,
-      "scenarios": [
-        {"annual_rate_pct": 6.5, "term_years": 30},
-        {"annual_rate_pct": 6.0, "term_years": 15}
-      ]
+      "annual_rate_pct": 6.0,
+      "term_years": 15
     }
   }
 }
@@ -1281,6 +1282,212 @@ post-acceptance, which are the most common value leakage point on historic prope
 
 ---
 
+## 🔌 Live Data Enrichment via Optional Integrations
+
+### **Scenario**: An out-of-state buyer relocating to Downtown Riverside wants a due-diligence brief — flood risk, walkability, crime, environmental hazards, weather, current mortgage rates, and demographics — before flying in to tour PROP001
+
+#### **Step 1: User Request**
+```
+Relocation Buyer: "I'm flying in next week to look at 1234 Mission Inn Ave in
+Downtown Riverside. Before I book the trip, can you pull together everything you
+can on flood risk, walkability, crime, environmental hazards, this week's weather,
+current mortgage rates, and area demographics? I'd also love a live valuation
+check if you can get one."
+```
+
+#### **Step 2: AI Assistant Processing**
+```
+AI Assistant: "All of that comes from optional, opt-in integrations that are off
+by default — let me check integration_status first to see what's enabled. For
+whichever free sources are on, I'll pull live data. RentCast and Zillow are
+metered/paid, so I'll only call those if they're configured, and I'll say so
+plainly if they're not — no surprise charges."
+```
+
+#### **Step 3: MCP Server Interactions**
+
+**Tool Call 1 — check what's enabled before calling anything:**
+```json
+{
+  "method": "tools/call",
+  "params": { "name": "integration_status", "arguments": {} }
+}
+```
+
+**Tool Call 2 — flood zone (FEMA, free/keyless):**
+```json
+{
+  "method": "tools/call",
+  "params": {
+    "name": "get_live_flood_zone",
+    "arguments": { "lat": 33.982735, "lon": -117.373137 }
+  }
+}
+```
+
+**Tool Call 3 — walkability (Walk Score, free tier):**
+```json
+{
+  "method": "tools/call",
+  "params": {
+    "name": "get_live_walk_score",
+    "arguments": {
+      "address": "1234 Mission Inn Ave, Riverside, CA 92501",
+      "lat": 33.982735,
+      "lon": -117.373137
+    }
+  }
+}
+```
+
+**Tool Call 4 — state crime trend (FBI Crime Data, free):**
+```json
+{
+  "method": "tools/call",
+  "params": {
+    "name": "get_live_crime_summary",
+    "arguments": { "state_abbr": "CA", "offense": "violent-crime" }
+  }
+}
+```
+
+**Tool Call 5 — environmental hazards (EPA, free/keyless):**
+```json
+{
+  "method": "tools/call",
+  "params": {
+    "name": "get_live_environmental_hazards",
+    "arguments": { "state_abbr": "CA" }
+  }
+}
+```
+
+**Tool Call 6 — this week's forecast (NOAA, free/keyless):**
+```json
+{
+  "method": "tools/call",
+  "params": {
+    "name": "get_live_weather_forecast",
+    "arguments": { "lat": 33.982735, "lon": -117.373137 }
+  }
+}
+```
+
+**Tool Call 7 — current mortgage rate (FRED, free):**
+```json
+{
+  "method": "tools/call",
+  "params": { "name": "get_live_mortgage_rate", "arguments": {} }
+}
+```
+
+**Tool Call 8 — area demographics (Census, free):**
+```json
+{
+  "method": "tools/call",
+  "params": {
+    "name": "get_live_demographics",
+    "arguments": { "state_fips": "06" }
+  }
+}
+```
+
+**Tool Call 9 — live property record (RentCast, metered/paid):**
+```json
+{
+  "method": "tools/call",
+  "params": {
+    "name": "lookup_live_property",
+    "arguments": { "address": "1234 Mission Inn Ave, Riverside, CA 92501" }
+  }
+}
+```
+
+**Tool Call 10 — live valuation check (Zillow, paid/enterprise):**
+```json
+{
+  "method": "tools/call",
+  "params": {
+    "name": "lookup_live_zestimate",
+    "arguments": { "address": "1234 Mission Inn Ave, Riverside, CA 92501" }
+  }
+}
+```
+
+**Resource Access — same status, as a resource instead of a tool call:**
+```json
+{
+  "method": "resources/read",
+  "params": { "uri": "realestate://integrations/status" }
+}
+```
+
+#### **Step 4: Server Processing**
+1. Every integration reads its `*_ENABLED` flag and (where required) its API key from the environment on each call — nothing is cached at startup, so toggling a flag takes effect on the next request
+2. **Disabled or unconfigured sources make zero network calls.** They return a structured status payload (`enabled`, `configured`, `missing_settings`, a plain-language `message`) instead — this is what happened for RentCast and Zillow below, since no metered/paid credentials are configured in this example
+3. **Enabled free sources hit the real API** and return live data — FEMA, Walk Score, FBI Crime Data, EPA, NOAA, FRED, and Census in this example
+4. Every call is audit-logged locally via `utils.audit()`; API keys are never echoed back in any tool or resource response, enabled or not
+5. Live-data failures (rate limits, bad coordinates, network errors) degrade to a clear `error` field — never a silent false success
+
+#### **Step 5: Response to Relocation Buyer**
+```markdown
+## Due-Diligence Brief — 1234 Mission Inn Ave, Downtown Riverside, CA
+
+### Integration Status (checked first — free sources enabled for this trip)
+| Source | Enabled | Cost |
+|---|---|---|
+| FEMA (flood) | ✅ | Free |
+| Walk Score | ✅ | Free up to 5,000 calls/day |
+| FBI Crime Data | ✅ | Free |
+| EPA (environmental) | ✅ | Free |
+| NOAA (weather) | ✅ | Free |
+| FRED (mortgage rates) | ✅ | Free |
+| Census (demographics) | ✅ | Free |
+| RentCast (property records) | ⬜ Not configured | Metered — may incur cost |
+| Zillow (Zestimate) | ⬜ Not configured | Paid/enterprise — requires an approved data license |
+
+### Flood Risk (FEMA)
+Zone **X** — "Area of Minimal Flood Hazard," outside the Special Flood Hazard Area. Flood insurance is not federally required for this zone.
+
+### Walkability
+Walk Score **91** ("Walker's Paradise") · Transit Score **58** · Bike Score **72** — consistent with the listing's "walking distance to Mission Inn and downtown amenities" description.
+
+### Crime Trend (California, trailing 12 months, FBI Crime Data Explorer)
+Statewide violent-crime actuals have ranged from ~8,900 to ~15,400 incidents/month over the past year, with no sustained upward trend. *State-level context only — the tool does not yet support a city/radius-level crime query.*
+
+### Environmental Hazards (EPA Toxics Release Inventory)
+25 TRI-reporting facilities statewide returned for California; none in the immediate Downtown Riverside area in this sample. *State-level query only — cross-reference county/city fields for local relevance.*
+
+### This Week's Weather (NOAA)
+Overnight: 64°F, clear, light SW wind. Riverside's forecast this week is typical for the season — no severe weather advisories active.
+
+### Current Mortgage Rate (FRED, Freddie Mac PMMS)
+30-year fixed: **6.85%** as of the most recent weekly survey — plug this into `calculate_mortgage_payment` for an up-to-date payment estimate instead of an assumed rate.
+
+### Area Demographics (Census ACS 5-Year, California)
+Population ~39.0M · Median household income ~$84,000. *State-level in this example — pass a tract/county FIPS code for neighborhood-level figures.*
+
+### Live Property Record (RentCast) — not available
+RentCast is not configured for this session. Enable with `RENTCAST_ENABLED=true` and `RENTCAST_API_KEY` to pull a live property record and rent estimate (metered — understand the billing implications first).
+
+### Live Valuation Check (Zillow) — not available
+Zillow requires an approved, paid Zillow Group data license (e.g. Bridge Interactive, ~$500+/mo) — there is no public self-serve Zillow API. Enable with `ZILLOW_ENABLED=true` and `ZILLOW_API_KEY` once you have one.
+
+### Next Steps
+1. All flags above are green except the two paid sources — no additional setup needed for this brief
+2. If a live AVM check matters before booking travel, weigh RentCast's metered cost against the value of an extra data point
+3. Re-run `get_live_mortgage_rate` the morning of the offer — FRED's rate updates weekly
+```
+
+> **Note on cost and privacy:** every source in this workflow is **opt-in and off by
+> default**. Nothing above required enabling a paid integration — seven of nine
+> sources are free, and the two paid ones (RentCast, Zillow) clearly self-report
+> as unconfigured rather than silently failing or incurring a surprise charge.
+> See [`integrations/README.md`](integrations/README.md) for the full enable/cost
+> table and its live spec-verification notes.
+
+---
+
 ## 🔄 Workflow Summary
 
 ### Common Patterns Across All Workflows
@@ -1297,7 +1504,7 @@ Every workflow above follows the same five-step structure:
 
 | Workflow | Core tools used | Prompt used |
 |---|---|---|
-| Buyer financing plan | `estimate_affordability_tool`, `filter_properties`, `calculate_mortgage_payment`, `generate_amortization_schedule`, `compare_loan_scenarios` | `mortgage_planning_prompt` |
+| Buyer financing plan | `estimate_affordability_tool`, `filter_properties`, `calculate_mortgage_payment`, `get_amortization_schedule` | `mortgage_planning_prompt` |
 | CMA valuation | `estimate_property_value`, `get_recent_sales` | `valuation_prompt` |
 | Investment analysis | `analyze_investment`, `get_investment_opportunities` | `investment_analysis` |
 | Neighborhood comparison | `compare_areas`, `get_schools_data`, `get_comprehensive_area_report` | `comparative_market_analysis` |
@@ -1306,12 +1513,13 @@ Every workflow above follows the same five-step structure:
 | Document ingestion | `ingest_listing_document`, `export_property_report` | — |
 | Batch queue | `queue_property_analysis`, `list_analysis_jobs`, `get_analysis_result` | — |
 | Deep analysis | `deep_analyze_property` | `property_analysis` |
+| Live integrations | `integration_status`, `get_live_flood_zone`, `get_live_walk_score`, `get_live_crime_summary`, `get_live_environmental_hazards`, `get_live_weather_forecast`, `get_live_mortgage_rate`, `get_live_demographics`, `lookup_live_property`, `lookup_live_zestimate` | — |
 
 ### Key Benefits
 
 ✅ **Composable** — tools chain together; the output of one (e.g., affordability ceiling) becomes the input of the next (property filter)  
 ✅ **Deterministic** — same inputs always produce same outputs; the finance and valuation engines are pure functions  
-✅ **Offline-first** — all workflows above run fully offline; live data (Census, RentCast) is opt-in and additive  
+✅ **Offline-first** — all workflows above run fully offline; live data (Census, Walk Score, FEMA, FRED, FBI Crime Data, EPA, NOAA — free; RentCast, Zillow — paid/metered) is opt-in and additive  
 ✅ **Audited** — every tool call writes an audit record via `utils.audit()` for provenance and compliance  
 ✅ **Format-ready** — outputs are structured Markdown and JSON — easy to pipe into reports, emails, or CRMs  
 
