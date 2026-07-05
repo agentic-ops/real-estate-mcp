@@ -25,7 +25,8 @@ Always-on server configuration (registered regardless of feature flags):
 Optional live-integration status (registered when the `integrations` category
 is enabled):
 - `realestate://integrations/status` - Enabled/configured state for the
-  Census and RentCast adapters (never returns API keys)
+  Census, Walk Score, FEMA, FRED, FBI Crime Data, EPA, NOAA (free), and
+  RentCast, Zillow (paid) adapters (never returns API keys)
 
 ### `property_resources.py`
 Property-related data access:

@@ -7,9 +7,10 @@ Guidance for AI agents and developers working in this repository.
 A Model Context Protocol (MCP) server for real estate workflows: property
 search and insights, agent/client management, market and area intelligence,
 mortgage/affordability math, comparable-based valuation, investment analysis,
-and listing-document ingestion — plus optional opt-in live integrations
-(Census, RentCast). See `README.md` for the full feature list and
-`WORKFLOW_EXAMPLES.md` for end-to-end examples.
+and listing-document ingestion — plus optional opt-in live integrations: free
+sources (Census, Walk Score, FEMA, FRED, FBI Crime Data, EPA, NOAA) and
+paid/metered sources (RentCast, Zillow). See `README.md` for the full feature
+list and `WORKFLOW_EXAMPLES.md` for end-to-end examples.
 
 ## Project layout
 
@@ -24,7 +25,9 @@ and listing-document ingestion — plus optional opt-in live integrations
   (`register_all_tools`, `register_all_resources`, `register_all_prompts`).
 - `tools/finance_helpers.py` — pure, deterministic finance math (unit-tested).
 - `integrations/` — `config.py` (feature flags + credentials from env),
-  `census.py`, `rentcast.py`. Disabled by default.
+  plus one adapter module per provider: `census.py`, `walkscore.py`,
+  `fema.py`, `fred.py`, `fbi_crime.py`, `epa.py`, `noaa.py` (free), and
+  `rentcast.py`, `zillow.py` (paid/metered). Disabled by default.
 - `data/` — JSON seed data. Adding/adjusting data usually requires no code
   changes.
 - `tests/` — `unit/` and `integration/`; shared helpers in `tests/conftest.py`
@@ -72,9 +75,10 @@ checks.
   `6277` (both bind IPv6 `::1`, so use `localhost`, not `127.0.0.1`). Connect
   with Transport = SSE, URL = `http://127.0.0.1:8000/sse`.
 - **Live integrations are OFF by default** and must stay that way in tests.
-  RentCast is metered and may incur costs; do not enable it against production.
-  The test suite mocks `httpx` (`httpx.MockTransport`) so no real network calls
-  occur — keep new integration tests network-free the same way.
+  RentCast and Zillow are metered/paid and may incur costs; do not enable
+  them against production. The test suite mocks `httpx`
+  (`httpx.MockTransport`) so no real network calls occur — keep new
+  integration tests network-free the same way.
 - **Analysis queue writes a local SQLite file** (`real_estate_mcp_analysis.db`)
   in the working directory; it is gitignored. Tests point `_DB_PATH` at a temp
   file via monkeypatch, so never commit a stray `.db`.

@@ -6,7 +6,8 @@ tools, resources, and prompts for property search and insights, agent/client
 management, market and area intelligence, **mortgage/affordability math,
 comparable-based valuation, investment analysis, and listing-document
 ingestion** — all backed by a deterministic, offline-first engine and optional
-**opt-in live data integrations** (Census, RentCast).
+**opt-in live data integrations**: free sources (Census, Walk Score, FEMA,
+FRED, FBI Crime Data, EPA, NOAA) and paid/metered sources (RentCast, Zillow).
 
 > **This server provides workflow augmentation, not financial, legal, or
 > appraisal advice.** Always consult qualified professionals for investment and
@@ -24,7 +25,7 @@ ingestion** — all backed by a deterministic, offline-first engine and optional
 - [🚀 Quick start](#-quick-start)
 - [🧰 Capabilities](#-capabilities)
 - [Feature flags (tool categories)](#feature-flags-tool-categories)
-- [🔌 Live integrations (Census & RentCast)](#-live-integrations-census--rentcast)
+- [🔌 Live integrations](#-live-integrations)
 - [🐳 Docker](#-docker)
 - [🧪 Testing, linting & types](#-testing-linting--types)
 - [🛠️ Development](#️-development)
@@ -46,22 +47,22 @@ flowchart LR
   inference[Inference Provider]
   mcpServer[Real Estate MCP Server]
   localData[Local JSON seed data]
-  census[Census Bureau API]
-  rentcast[RentCast API]
+  freeApis[Free APIs: Census, Walk Score, FEMA, FRED, FBI Crime, EPA, NOAA]
+  paidApis[Paid APIs: RentCast, Zillow]
 
   user -->|"prompts and property queries"| aiClient
   aiClient -->|"full conversation context"| inference
   aiClient <-->|"MCP tool calls and JSON responses"| mcpServer
   mcpServer -->|"offline by default"| localData
-  mcpServer -.->|"opt-in, free"| census
-  mcpServer -.->|"opt-in, metered"| rentcast
+  mcpServer -.->|"opt-in, free"| freeApis
+  mcpServer -.->|"opt-in, metered/paid"| paidApis
 ```
 
 | Boundary | What crosses it | Default behavior | Note |
 | --- | --- | --- | --- |
 | **You → AI assistant** | Prompts, property queries, tool results pasted into chat | Always active when using an AI client | Your inference provider's ToS governs data retention |
 | **AI assistant → MCP server** | Tool arguments (addresses, criteria, client IDs) and JSON responses | Local transport (stdio/SSE/HTTP on your machine) | Tool calls are audit-logged locally via `utils.audit()` |
-| **MCP server → external APIs** | Search queries to Census or RentCast | **Disabled by default** | Enable only when needed; RentCast is metered (see below) |
+| **MCP server → external APIs** | Search queries to Census, Walk Score, FEMA, FRED, FBI Crime Data, EPA, NOAA, RentCast, or Zillow | **Disabled by default** | Enable only when needed; RentCast and Zillow are metered/paid (see below) |
 
 **Key takeaway:** this MCP server is **offline and deterministic by default**.
 The highest privacy risk is the **inference provider** receiving your full
@@ -71,14 +72,16 @@ prompt context — including property data returned by these tools.
 
 ## ⚠️ RentCast metered API (read first)
 
-**If you connect this MCP server (or an AI assistant using it) to RentCast,
-you are responsible for all charges incurred on your account.** RentCast bills
-per API call, and AI agents can issue many requests in a short session.
+**If you connect this MCP server (or an AI assistant using it) to RentCast or
+Zillow, you are responsible for all charges incurred on your account.**
+RentCast bills per API call, Zillow access requires a paid enterprise data
+license, and AI agents can issue many requests in a short session.
 
 To protect you from surprise charges, **every live integration is disabled by
-default** and must be explicitly enabled with a feature flag and API key (see
-[Live integrations](#-live-integrations-census--rentcast)). Prefer the free
-**Census Bureau** source for demographic context wherever possible.
+default** and must be explicitly enabled with a feature flag and (where
+required) an API key — see [Live integrations](#-live-integrations). Prefer
+the **free** sources (Census, Walk Score, FEMA, FRED, FBI Crime Data, EPA,
+NOAA) wherever possible; RentCast and Zillow are metered/paid.
 
 ---
 
@@ -93,7 +96,7 @@ default** and must be explicitly enabled with a feature flag and API key (see
 | [`tools/finance_helpers.py`](tools/finance_helpers.py) | Pure, deterministic finance math — fully unit-tested |
 | [`resources/`](resources/) | MCP resource endpoints (`realestate://` URIs) |
 | [`prompts/`](prompts/) | 13 workflow prompt templates |
-| [`integrations/`](integrations/) | Optional Census + RentCast adapters — disabled by default |
+| [`integrations/`](integrations/) | Optional live-data adapters (free: Census, Walk Score, FEMA, FRED, FBI Crime, EPA, NOAA; paid: RentCast, Zillow) — disabled by default |
 | [`data/`](data/) | Offline JSON seed data (properties, agents, clients, markets, areas) |
 | [`tests/`](tests/) | pytest suite — unit + integration, fully network-free |
 | [`.agents/`](.agents/) | Vendor-agnostic agent skill (real-estate-mcp-toolkit) |
@@ -229,7 +232,7 @@ DANGEROUSLY_OMIT_AUTH=true MCP_AUTO_OPEN_ENABLED=false npx -y @modelcontextproto
 | **Valuation** | `REALESTATE_MCP_ENABLE_VALUATION` | `estimate_property_value`, `analyze_investment`, `deep_analyze_property` |
 | **Document** | `REALESTATE_MCP_ENABLE_DOCUMENT` | `ingest_listing_document`, `export_property_report` |
 | **Analysis Queue** | `REALESTATE_MCP_ENABLE_ANALYSIS_QUEUE` | `queue_property_analysis`, `get_analysis_status`, `get_analysis_result`, `list_analysis_jobs` |
-| **Integrations** | `REALESTATE_MCP_ENABLE_INTEGRATIONS` | `integration_status`, `lookup_live_property` |
+| **Integrations** | `REALESTATE_MCP_ENABLE_INTEGRATIONS` | `integration_status`, `lookup_live_property`, `lookup_live_zestimate`, `get_live_demographics`, `get_live_walk_score`, `get_live_flood_zone`, `get_live_mortgage_rate`, `get_live_crime_summary`, `get_live_environmental_hazards`, `get_live_weather_forecast` |
 | **System** | `REALESTATE_MCP_ENABLE_SYSTEM` | `get_server_info`, `refresh_data`, `get_data_summary` |
 
 **Highlights:**
@@ -314,11 +317,11 @@ analysis plus an explanatory note — not an error.
 
 ---
 
-## 🔌 Live integrations (Census & RentCast)
+## 🔌 Live integrations
 
 Live data sources are **optional and disabled by default**. Each is controlled
-by a **feature flag** plus **credentials**, all supplied via environment
-variables. Check the current state at any time:
+by a **feature flag** plus (where required) **credentials**, all supplied via
+environment variables. Check the current state at any time:
 
 ```bash
 # via the tool
@@ -331,37 +334,62 @@ realestate://integrations/status
 `integration_status` and the resource return only booleans and non-sensitive
 metadata — **credentials are never echoed back**.
 
-### Census Bureau API — free, preferred
+| Source | Cost | Enable flag | Credentials | Tool(s) |
+|---|---|---|---|---|
+| [Census Bureau](https://api.census.gov/data/key_signup.html) | Free (rate-limited) | `CENSUS_ENABLED` | `CENSUS_API_KEY` (optional) | `get_live_demographics` |
+| [Walk Score](https://www.walkscore.com/professional/api.php) | Free up to 5,000 calls/day | `WALKSCORE_ENABLED` | `WALKSCORE_API_KEY` (required) | `get_live_walk_score` |
+| [FEMA NFHL](https://hazards.fema.gov/gis/nfhl/rest/services/public/NFHL/MapServer) | Free (keyless) | `FEMA_ENABLED` | none | `get_live_flood_zone` |
+| [FRED](https://fredaccount.stlouisfed.org/apikeys) | Free | `FRED_ENABLED` | `FRED_API_KEY` (required) | `get_live_mortgage_rate` |
+| [FBI Crime Data](https://api.data.gov/signup/) | Free | `FBI_CRIME_ENABLED` | `FBI_CRIME_API_KEY` (required) | `get_live_crime_summary` |
+| [EPA Envirofacts](https://www.epa.gov/enviro/envirofacts-data-service-api) | Free (keyless) | `EPA_ENABLED` | none | `get_live_environmental_hazards` |
+| [NOAA/NWS](https://www.weather.gov/documentation/services-web-api) | Free (keyless) | `NOAA_ENABLED` | none | `get_live_weather_forecast` |
+| [RentCast](https://rentcast.io) | **Metered; may incur cost** | `RENTCAST_ENABLED` | `RENTCAST_API_KEY` (required) | `lookup_live_property` |
+| [Zillow (Bridge Interactive)](https://www.bridgeinteractive.com/developers/zillow-group-data/) | **Paid/enterprise; requires an approved data license** | `ZILLOW_ENABLED` | `ZILLOW_API_KEY` (required) | `lookup_live_zestimate` |
 
-The Census Bureau's public API provides demographic and economic context at no
-cost. Authentication is an optional API key (requests work without one, but
-a key raises rate limits).
+### Free sources
 
-| Variable | Default | Description |
-|---|---|---|
-| `CENSUS_ENABLED` | `false` | Feature flag to enable the integration |
-| `CENSUS_API_KEY` | _(unset)_ | Optional key from [api.census.gov/data/key_signup.html](https://api.census.gov/data/key_signup.html) |
+Census, Walk Score, FEMA, FRED, FBI Crime Data, EPA, and NOAA are all free.
+Some (Walk Score, FRED, FBI Crime Data) still require a free API key to raise
+rate limits or authenticate; FEMA, EPA, and NOAA are fully keyless.
 
 ```bash
 export CENSUS_ENABLED=true
-export CENSUS_API_KEY="your-key-here"   # optional but recommended
+# export CENSUS_API_KEY=...       # optional; raises rate limits
+
+export WALKSCORE_ENABLED=true
+export WALKSCORE_API_KEY="your-key-here"
+
+export FEMA_ENABLED=true          # no key needed
+
+export FRED_ENABLED=true
+export FRED_API_KEY="your-key-here"
+
+export FBI_CRIME_ENABLED=true
+export FBI_CRIME_API_KEY="your-key-here"
+
+export EPA_ENABLED=true           # no key needed
+export NOAA_ENABLED=true          # no key needed
+
 python main.py
 ```
 
-### RentCast — metered, off by default
+### Paid / metered sources
 
-RentCast provides rental market data and AVM estimates. Requests draw against
-a monthly quota and **may incur costs**. See [rentcast.io](https://rentcast.io)
-for current pricing.
-
-| Variable | Default | Description |
-|---|---|---|
-| `RENTCAST_ENABLED` | `false` | Feature flag to enable the integration |
-| `RENTCAST_API_KEY` | _(unset)_ | API key from your RentCast account |
+RentCast provides rental market data and AVM estimates; requests draw against
+a monthly quota and **may incur costs**. Zillow retired its public API in
+2021 — live access now requires an approved, paid Zillow Group data license
+(e.g. [Bridge Interactive](https://www.bridgeinteractive.com/developers/zillow-group-data/),
+typically $500+/month) or an equivalent licensed provider; there is **no**
+public self-serve Zillow API.
 
 ```bash
 export RENTCAST_ENABLED=true
 export RENTCAST_API_KEY="your-key-here"
+
+export ZILLOW_ENABLED=true
+export ZILLOW_API_KEY="your-provider-issued-token"
+# export ZILLOW_BASE_URL=...      # point at your approved provider's endpoint
+
 python main.py
 ```
 

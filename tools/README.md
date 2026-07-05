@@ -16,7 +16,7 @@ Each module exposes a `register_<category>_tools(mcp)` function; the package
 | `deep_analysis_tools.py` | `valuation` | MCP sampling deep analysis + heuristic fallback |
 | `document_tools.py` | `document` | Listing ingestion + `.docx` report export |
 | `analysis_queue_tools.py` | `analysis_queue` | SQLite-backed async analysis queue |
-| `integration_tools.py` | `integrations` | Live integration status + lookups |
+| `integration_tools.py` | `integrations` | Live integration status + lookups (free: Census, Walk Score, FEMA, FRED, FBI Crime, EPA, NOAA; paid: RentCast, Zillow) |
 | `system_tools.py` | `system` | Data refresh, server info, summaries |
 
 Shared helper: `finance_helpers.py` holds the pure, deterministic finance
