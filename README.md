@@ -338,7 +338,7 @@ metadata — **credentials are never echoed back**.
 |---|---|---|---|---|
 | [Census Bureau](https://api.census.gov/data/key_signup.html) | Free (rate-limited) | `CENSUS_ENABLED` | `CENSUS_API_KEY` (optional) | `get_live_demographics` |
 | [Walk Score](https://www.walkscore.com/professional/api.php) | Free up to 5,000 calls/day | `WALKSCORE_ENABLED` | `WALKSCORE_API_KEY` (required) | `get_live_walk_score` |
-| [FEMA NFHL](https://hazards.fema.gov/gis/nfhl/rest/services/public/NFHL/MapServer) | Free (keyless) | `FEMA_ENABLED` | none | `get_live_flood_zone` |
+| [FEMA NFHL](https://hazards.fema.gov/arcgis/rest/services/public/NFHL/MapServer) | Free (keyless) | `FEMA_ENABLED` | none | `get_live_flood_zone` |
 | [FRED](https://fredaccount.stlouisfed.org/apikeys) | Free | `FRED_ENABLED` | `FRED_API_KEY` (required) | `get_live_mortgage_rate` |
 | [FBI Crime Data](https://api.data.gov/signup/) | Free | `FBI_CRIME_ENABLED` | `FBI_CRIME_API_KEY` (required) | `get_live_crime_summary` |
 | [EPA Envirofacts](https://www.epa.gov/enviro/envirofacts-data-service-api) | Free (keyless) | `EPA_ENABLED` | none | `get_live_environmental_hazards` |

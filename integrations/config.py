@@ -22,10 +22,12 @@ CENSUS_DEFAULT_BASE_URL = "https://api.census.gov/data"
 RENTCAST_DEFAULT_BASE_URL = "https://api.rentcast.io/v1"
 WALKSCORE_DEFAULT_BASE_URL = "https://api.walkscore.com"
 FEMA_DEFAULT_BASE_URL = (
-    "https://hazards.fema.gov/gis/nfhl/rest/services/public/NFHL/MapServer"
+    "https://hazards.fema.gov/arcgis/rest/services/public/NFHL/MapServer"
 )
 FRED_DEFAULT_BASE_URL = "https://api.stlouisfed.org/fred"
-FBI_CRIME_DEFAULT_BASE_URL = "https://api.usa.gov/crime/fbi/sapi"
+# The legacy "sapi" host (api.usa.gov/crime/fbi/sapi) now 404s; the FBI Crime
+# Data Explorer serves the same "summarized" endpoint under "cde".
+FBI_CRIME_DEFAULT_BASE_URL = "https://api.usa.gov/crime/fbi/cde"
 EPA_DEFAULT_BASE_URL = "https://data.epa.gov/efservice"
 NOAA_DEFAULT_BASE_URL = "https://api.weather.gov"
 NOAA_DEFAULT_CONTACT = "real-estate-mcp (no-contact-configured@example.com)"

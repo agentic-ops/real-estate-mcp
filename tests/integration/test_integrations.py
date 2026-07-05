@@ -269,7 +269,8 @@ class TestEnabledWithMock:
         def handler(request):
             assert request.url.params.get("wsapikey") == "wskey"
             return httpx.Response(
-                200, json={"walkscore": 88, "description": "Very Walkable"}
+                200,
+                json={"status": 1, "walkscore": 88, "description": "Very Walkable"},
             )
 
         client = WalkScoreClient(
@@ -279,6 +280,22 @@ class TestEnabledWithMock:
         result = client.walk_score("1 Main St", 47.6, -122.3)
         assert result["enabled"] is True
         assert result["results"][0]["walkscore"] == 88
+
+    def test_walkscore_surfaces_error_status_on_http_200(self):
+        """Walk Score returns HTTP 200 even for an invalid key (status=40);
+        this must be surfaced as an error, not a false success."""
+
+        def handler(request):
+            return httpx.Response(200, json={"status": 40})
+
+        client = WalkScoreClient(
+            WalkScoreSettings(enabled=True, api_key="bad-key"),
+            http_client=_mock_client(handler),
+        )
+        result = client.walk_score("1 Main St", 47.6, -122.3)
+        assert result["enabled"] is True
+        assert "40" in result["error"]
+        assert result["results"] == []
 
     def test_fema_parses_features(self):
         def handler(request):
@@ -324,9 +341,21 @@ class TestEnabledWithMock:
     def test_fbi_crime_parses_results(self):
         def handler(request):
             assert request.url.params.get("api_key") == "fbikey"
-            return httpx.Response(
-                200, json={"results": [{"data_year": 2024, "actual": 100}]}
-            )
+            assert "cde" in str(request.url)
+            # from/to are required MM-YYYY params supplied by the client.
+            assert request.url.params.get("from")
+            assert request.url.params.get("to")
+            payload = {
+                "offenses": {
+                    "actuals": {
+                        "California Offenses": {"01-2020": 14025, "02-2020": 13257}
+                    },
+                    "rates": {
+                        "California Offenses": {"01-2020": 35.63, "02-2020": 33.68}
+                    },
+                }
+            }
+            return httpx.Response(200, json=payload)
 
         client = FbiCrimeClient(
             FbiCrimeSettings(enabled=True, api_key="fbikey"),
@@ -334,7 +363,11 @@ class TestEnabledWithMock:
         )
         result = client.state_crime_summary("CA")
         assert result["enabled"] is True
-        assert result["result_count"] == 1
+        assert result["result_count"] == 4
+        assert any(
+            r["metric"] == "actuals" and r["period"] == "01-2020"
+            for r in result["results"]
+        )
 
     def test_epa_parses_results(self):
         def handler(request):
@@ -382,7 +415,11 @@ class TestEnabledWithMock:
     def test_zillow_parses_results(self):
         def handler(request):
             assert request.url.params.get("access_token") == "zkey"
-            return httpx.Response(200, json=[{"zpid": "12345", "zestimate": 600000}])
+            assert request.headers.get("Authorization") == "Bearer zkey"
+            assert "/zestimates" in str(request.url)
+            return httpx.Response(
+                200, json={"bundle": [{"zpid": "12345", "zestimate": 600000}]}
+            )
 
         client = ZillowClient(
             ZillowSettings(enabled=True, api_key="zkey"),

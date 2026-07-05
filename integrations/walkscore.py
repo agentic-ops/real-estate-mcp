@@ -7,6 +7,13 @@ disabled or unconfigured it returns a structured status payload instead of
 making any network call.
 
 API reference: https://www.walkscore.com/professional/api.php
+
+IMPORTANT (verified live 2026-07-05): Walk Score returns HTTP 200 even for
+key/quota/IP errors -- the actual outcome is only visible in the JSON body's
+``status`` field (e.g. an invalid key returns ``HTTP 200 {"status": 40}``).
+``response.raise_for_status()`` alone will NOT catch this, so this adapter
+explicitly inspects ``status`` and surfaces the documented error text
+instead of reporting a false success.
 """
 
 from __future__ import annotations
@@ -15,6 +22,18 @@ from typing import Any, Dict, Optional
 
 from integrations.config import WalkScoreSettings, get_integration_settings
 from utils import audit
+
+# https://www.walkscore.com/professional/api.php -- "Status and Error Codes"
+STATUS_MESSAGES = {
+    1: "Walk Score successfully returned.",
+    2: "Score is being calculated and is not currently available.",
+    30: "Invalid latitude/longitude.",
+    31: "Walk Score API internal error.",
+    40: "Your WSAPIKEY is invalid.",
+    41: "Your daily API quota has been exceeded.",
+    42: "Your IP address has been blocked.",
+}
+SUCCESS_STATUS_CODES = {1, 2}
 
 
 class WalkScoreClient:
@@ -113,10 +132,23 @@ class WalkScoreClient:
                 "results": [],
             }
 
+        status_code: int = (
+            payload.get("status", -1) if isinstance(payload, dict) else -1
+        )
+        if status_code not in SUCCESS_STATUS_CODES:
+            message = STATUS_MESSAGES.get(status_code, "unknown error")
+            return {
+                **self.status(),
+                "address": address,
+                "error": f"Walk Score returned status {status_code}: {message}",
+                "results": [],
+            }
+
         return {
             "source": "walkscore",
             "enabled": True,
             "address": address,
+            "pending": status_code == 2,
             "result_count": 1,
             "results": [payload],
         }

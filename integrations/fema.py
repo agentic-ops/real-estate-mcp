@@ -5,7 +5,12 @@ zone(s) intersecting a coordinate -- useful for buyer due-diligence and
 flood-insurance disclosure context. Disabled by default; when disabled it
 returns a structured status payload instead of making any network call.
 
-API reference: https://hazards.fema.gov/gis/nfhl/rest/services/public/NFHL/MapServer
+API reference: https://hazards.fema.gov/femaportal/resources/flood_map_svc.htm
+Verified live endpoint (2026-07-05): GET .../MapServer/28/query returns
+``{"features": [{"attributes": {"FLD_ZONE": "X", ...}}]}`` for a point
+query. Note: the older ``.../gis/nfhl/rest/services/...`` path some
+tutorials reference now 404s; the correct host path is
+``.../arcgis/rest/services/public/NFHL/MapServer``.
 """
 
 from __future__ import annotations

@@ -7,11 +7,31 @@ requires an approved enterprise license via Bridge Interactive
 equivalent licensed data provider -- typically an enterprise agreement
 starting around $500/month, not a self-serve signup. This adapter is
 therefore treated like RentCast: metered/paid and off by default, with a
-configurable ``base_url`` so it can point at whichever provider issued
-your access token.
+configurable ``base_url`` so it can point at whichever dataset endpoint
+your Bridge (or equivalent) account was granted.
 
-Auth: an ``access_token`` query parameter (Bridge Interactive convention)
-carrying your provider-issued token.
+Per Bridge's platform docs (bridgedataoutput.com/docs/platform), the
+documented Zestimate query shape is:
+
+    GET {base}/zestimates_v2/zestimates?access_token=...&address="..."
+
+``base_url`` here is expected to be the dataset root (e.g.
+``https://api.bridgedataoutput.com/api/v2/zestimates_v2``), and this
+adapter appends the ``/zestimates`` resource path -- mirroring the same
+"root + resource" convention used by the other adapters in this package.
+
+Auth: Bridge's documented primary mechanism is an ``Authorization: Bearer
+{token}`` header, with an ``access_token`` query parameter as the
+documented fallback for clients that cannot set headers. This adapter
+sends both for robustness against provider quirks.
+
+CAVEAT: because Bridge access is enterprise-gated and this repository has
+no test credentials, the exact response envelope could not be verified
+against a live account. Bridge's own glossary describes a "bundle" as the
+returned data payload, so this adapter looks for (in order) a top-level
+list, a ``bundle`` key, and a ``value`` key (the OData convention some
+Bridge endpoints also expose) before giving up. If your provider uses a
+different envelope, adjust ``lookup_zestimate`` accordingly.
 """
 
 from __future__ import annotations
@@ -90,9 +110,14 @@ class ZillowClient:
             }
 
         params = {"address": address, "access_token": self.settings.api_key}
+        headers = {"Authorization": f"Bearer {self.settings.api_key}"}
         try:
             client = self._get_client()
-            response = client.get(self.settings.base_url, params=params)
+            response = client.get(
+                f"{self.settings.base_url}/zestimates",
+                params=params,
+                headers=headers,
+            )
             response.raise_for_status()
             payload = response.json()
         except Exception as exc:  # pragma: no cover - network failure path
@@ -103,7 +128,11 @@ class ZillowClient:
                 "results": [],
             }
 
-        results = payload if isinstance(payload, list) else payload.get("bundle", [])
+        results: list = []
+        if isinstance(payload, list):
+            results = payload
+        elif isinstance(payload, dict):
+            results = payload.get("bundle") or payload.get("value") or []
         return {
             "source": "zillow",
             "enabled": True,
