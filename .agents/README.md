@@ -28,8 +28,8 @@ tools into complete workflows:
 - **Area & market intelligence** — `get_comprehensive_area_report`, `compare_areas`
 
 The skill also encodes non-negotiable rules (never present estimates as
-guarantees; prefer local tools over metered live integrations; always surface
-assumptions and disclaimers).
+guarantees; prefer local tools and free live integrations over
+metered/paid ones; always surface assumptions and disclaimers).
 
 ## Standard and compatibility
 

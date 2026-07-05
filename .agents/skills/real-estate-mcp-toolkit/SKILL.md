@@ -26,11 +26,16 @@ advice; every financial workflow ends with a disclaimer, not a guarantee.
 1. **Never present estimates as guarantees or appraisals.** Mortgage,
    valuation, and investment tools include a `disclaimer` field — always
    surface it.
-2. **Prefer local, offline tools first.** `lookup_live_property` (RentCast) is
-   opt-in and **metered** (may incur cost); `get_live_demographics` (Census)
-   is opt-in too. Use local `estimate_property_value`,
-   `comparable_market_analysis`, and the seed data unless the user needs live
-   external data.
+2. **Prefer local, offline tools first; and free live sources over paid
+   ones.** `lookup_live_property` (RentCast) and `lookup_live_zestimate`
+   (Zillow) are opt-in and **metered/paid** (may incur cost). The other live
+   tools -- `get_live_demographics` (Census), `get_live_walk_score`,
+   `get_live_flood_zone` (FEMA), `get_live_mortgage_rate` (FRED),
+   `get_live_crime_summary` (FBI), `get_live_environmental_hazards` (EPA),
+   `get_live_weather_forecast` (NOAA) -- are free. Use local
+   `estimate_property_value`, `comparable_market_analysis`, and the seed data
+   unless the user needs live external data, and reach for a free source
+   before RentCast/Zillow.
 3. **Real files over seed IDs when a file exists.** If the user has an actual
    `.txt`/`.docx` listing, use `ingest_listing_document` rather than assuming a
    seed `property_id`.
@@ -54,7 +59,7 @@ advice; every financial workflow ends with a disclaimer, not a guarantee.
 | Valuation | `estimate_property_value`, `comparable_market_analysis`, `analyze_investment`, `analyze_listing_investment`, `deep_analyze_property` |
 | Document | `ingest_listing_document`, `compare_listing_documents`, `export_property_report` |
 | Analysis Queue | `queue_property_analysis`, `get_analysis_status`, `get_analysis_result`, `list_analysis_jobs` |
-| Integrations | `integration_status`, `lookup_live_property`, `get_live_demographics` |
+| Integrations | `integration_status`, `get_live_demographics`, `get_live_walk_score`, `get_live_flood_zone`, `get_live_mortgage_rate`, `get_live_crime_summary`, `get_live_environmental_hazards`, `get_live_weather_forecast`, `lookup_live_property` (paid), `lookup_live_zestimate` (paid) |
 | System | `get_server_info`, `refresh_data`, `get_data_summary` |
 
 Full worked examples: [WORKFLOW_EXAMPLES.md](../../../WORKFLOW_EXAMPLES.md).

@@ -1,11 +1,19 @@
 """U.S. Census Bureau API adapter (American Community Survey).
 
-The Census API is free and does not strictly require a key (a key raises
-rate limits). It is the preferred free source for neighborhood demographic
-context. Disabled by default; when disabled it returns a structured status
-payload instead of making any network call.
+The Census API is free, but as of Census's own developer docs and
+confirmed live (2026-07-05), every query now requires an API key --
+keyless requests 302-redirect to ``missing_key.html``. This historically
+optional-key framing is outdated; request a free key at
+https://api.census.gov/data/key_signup.html. Disabled by default; when
+disabled or unconfigured it returns a structured status payload instead of
+making any network call.
 
 API reference: https://www.census.gov/data/developers/data-sets.html
+Verified live (2026-07-05): GET .../2022/acs/acs5?get=...&for=state:06
+  (no key)          -> HTTP 302 to missing_key.html
+  (key=<bogus>)     -> HTTP 302 to invalid_key.html
+  (key=<valid>)     -> HTTP 200 with the documented [[header...], [row...]]
+                       array shape (per Census's official example calls).
 """
 
 from __future__ import annotations
@@ -41,7 +49,10 @@ class CensusClient:
             "base_url": self.settings.base_url,
             "has_api_key": bool(self.settings.api_key),
             "missing_settings": self.settings.missing_settings(),
-            "cost": "free (rate-limited without a key); preferred demographic source",
+            "cost": (
+                "free, but Census now requires an API key for every "
+                "request; preferred demographic source"
+            ),
         }
 
     def _get_client(self):
@@ -75,14 +86,25 @@ class CensusClient:
                 ),
                 "results": [],
             }
+        if not self.settings.configured:
+            return {
+                **self.status(),
+                "state_fips": state_fips,
+                "message": (
+                    "Census is enabled but no API key is set. Census now "
+                    "requires a key for every request -- get a free one at "
+                    "https://api.census.gov/data/key_signup.html and set "
+                    "CENSUS_API_KEY."
+                ),
+                "results": [],
+            }
 
         # B01003_001E = total population; B19013_001E = median household income.
         params = {
             "get": "NAME,B01003_001E,B19013_001E",
             "for": f"state:{state_fips}",
+            "key": self.settings.api_key,
         }
-        if self.settings.api_key:
-            params["key"] = self.settings.api_key
         try:
             client = self._get_client()
             response = client.get(

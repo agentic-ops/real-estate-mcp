@@ -6,7 +6,18 @@ import json
 
 from mcp.server.fastmcp import FastMCP
 
-from integrations import CensusClient, RentCastClient, get_integration_settings
+from integrations import (
+    CensusClient,
+    EpaClient,
+    FbiCrimeClient,
+    FemaClient,
+    FredClient,
+    NoaaClient,
+    RentCastClient,
+    WalkScoreClient,
+    ZillowClient,
+    get_integration_settings,
+)
 from utils import audit
 
 
@@ -21,7 +32,14 @@ def register_integration_resources(mcp: FastMCP) -> None:
         return json.dumps(
             {
                 "census": CensusClient(settings.census).status(),
+                "walkscore": WalkScoreClient(settings.walkscore).status(),
+                "fema": FemaClient(settings.fema).status(),
+                "fred": FredClient(settings.fred).status(),
+                "fbi_crime": FbiCrimeClient(settings.fbi_crime).status(),
+                "epa": EpaClient(settings.epa).status(),
+                "noaa": NoaaClient(settings.noaa).status(),
                 "rentcast": RentCastClient(settings.rentcast).status(),
+                "zillow": ZillowClient(settings.zillow).status(),
             },
             indent=2,
         )
