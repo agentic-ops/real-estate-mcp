@@ -4,12 +4,12 @@ Agent resources for the Real Estate MCP Server
 
 import json
 
-from mcp.server.fastmcp import FastMCP
+from mcp.server.mcpserver import MCPServer
 
 from utils import data_manager
 
 
-def register_agent_resources(mcp: FastMCP):
+def register_agent_resources(mcp: MCPServer):
     """Register all agent-related resources with the MCP server"""
 
     @mcp.resource("realestate://all-agents")

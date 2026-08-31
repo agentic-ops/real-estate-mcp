@@ -10,7 +10,7 @@ from __future__ import annotations
 import json
 from typing import Any, Dict, List, Optional
 
-from mcp.server.fastmcp import FastMCP
+from mcp.server.mcpserver import MCPServer
 
 from tools.finance_helpers import investment_metrics
 from utils import audit, get_data_manager
@@ -38,7 +38,7 @@ def _area_ppsf(sales: List[Dict[str, Any]]) -> Optional[float]:
     return round(sum(values) / len(values), 2)
 
 
-def register_valuation_tools(mcp: FastMCP) -> None:
+def register_valuation_tools(mcp: MCPServer) -> None:
     """Register valuation and investment tools with the MCP server."""
 
     data = get_data_manager()

@@ -4,12 +4,12 @@ Property resources for the Real Estate MCP Server
 
 import json
 
-from mcp.server.fastmcp import FastMCP
+from mcp.server.mcpserver import MCPServer
 
 from utils import data_manager
 
 
-def register_property_resources(mcp: FastMCP):
+def register_property_resources(mcp: MCPServer):
     """Register all property-related resources with the MCP server"""
 
     @mcp.resource("realestate://all-properties")

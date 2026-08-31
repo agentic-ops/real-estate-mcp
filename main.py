@@ -22,7 +22,7 @@ import os
 import sys
 from typing import Literal, cast
 
-from mcp.server.fastmcp import FastMCP
+from mcp.server.mcpserver import MCPServer
 
 from feature_flags import enabled_categories
 from prompts import register_all_prompts
@@ -49,7 +49,7 @@ logging.basicConfig(
 logger = logging.getLogger("real_estate_mcp")
 
 
-def create_server(host: str = "127.0.0.1", port: int = 8000) -> FastMCP:
+def create_server(host: str = "127.0.0.1", port: int = 8000) -> MCPServer:
     """Build and fully configure the FastMCP server instance."""
 
     server = FastMCP(

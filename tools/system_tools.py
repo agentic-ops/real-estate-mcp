@@ -4,13 +4,13 @@ System and data management MCP tools
 
 import json
 
-from mcp.server.fastmcp import FastMCP
+from mcp.server.mcpserver import MCPServer
 
 from feature_flags import enabled_categories
 from utils import audit, data_manager
 
 
-def register_system_tools(mcp: FastMCP):
+def register_system_tools(mcp: MCPServer):
     """Register all system and data management tools with the MCP server"""
 
     @mcp.tool()

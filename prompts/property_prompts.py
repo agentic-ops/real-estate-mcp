@@ -2,10 +2,10 @@
 Property-related prompt templates for the Real Estate MCP Server
 """
 
-from mcp.server.fastmcp import FastMCP
+from mcp.server.mcpserver import MCPServer
 
 
-def register_property_prompts(mcp: FastMCP):
+def register_property_prompts(mcp: MCPServer):
     """Register all property-related prompt templates with the MCP server"""
 
     @mcp.prompt()

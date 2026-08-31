@@ -2,10 +2,10 @@
 Agent-related prompt templates for the Real Estate MCP Server
 """
 
-from mcp.server.fastmcp import FastMCP
+from mcp.server.mcpserver import MCPServer
 
 
-def register_agent_prompts(mcp: FastMCP):
+def register_agent_prompts(mcp: MCPServer):
     """Register all agent-related prompt templates with the MCP server"""
 
     def _generate_focus_area_strategy(focus_area):

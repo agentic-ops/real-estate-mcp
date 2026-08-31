@@ -4,12 +4,12 @@ Client management MCP tools
 
 import json
 
-from mcp.server.fastmcp import FastMCP
+from mcp.server.mcpserver import MCPServer
 
 from utils import PropertyFilter, data_manager
 
 
-def register_client_tools(mcp: FastMCP):
+def register_client_tools(mcp: MCPServer):
     """Register all client management tools with the MCP server"""
 
     @mcp.tool()

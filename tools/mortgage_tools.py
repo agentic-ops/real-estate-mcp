@@ -11,7 +11,7 @@ from __future__ import annotations
 import json
 from typing import Optional
 
-from mcp.server.fastmcp import FastMCP
+from mcp.server.mcpserver import MCPServer
 
 from tools.finance_helpers import (
     amortization_schedule,
@@ -24,7 +24,7 @@ from utils import audit
 DISCLAIMER = "Estimates for planning only. Not a lending offer or financial advice."
 
 
-def register_mortgage_tools(mcp: FastMCP) -> None:
+def register_mortgage_tools(mcp: MCPServer) -> None:
     """Register all mortgage/affordability tools with the MCP server."""
 
     @mcp.tool()

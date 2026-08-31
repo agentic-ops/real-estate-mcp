@@ -5,10 +5,10 @@ Covers mortgage/affordability planning and comparable-based valuation,
 tying together the mortgage and valuation tool categories.
 """
 
-from mcp.server.fastmcp import FastMCP
+from mcp.server.mcpserver import MCPServer
 
 
-def register_finance_prompts(mcp: FastMCP):
+def register_finance_prompts(mcp: MCPServer):
     """Register mortgage and valuation prompt templates with the MCP server"""
 
     @mcp.prompt()

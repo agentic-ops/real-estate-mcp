@@ -4,13 +4,13 @@ from __future__ import annotations
 
 import json
 
-from mcp.server.fastmcp import FastMCP
+from mcp.server.mcpserver import MCPServer
 
 from feature_flags import TOOL_CATEGORIES, enabled_categories
 from utils import audit, get_data_manager
 
 
-def register_config_resources(mcp: FastMCP) -> None:
+def register_config_resources(mcp: MCPServer) -> None:
     """Register always-on configuration resources."""
 
     @mcp.resource("realestate://server-config")

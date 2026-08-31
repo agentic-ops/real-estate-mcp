@@ -5,7 +5,7 @@ This module imports and registers all prompt categories with the MCP server.
 Provides a single entry point for prompt initialization.
 """
 
-from mcp.server.fastmcp import FastMCP
+from mcp.server.mcpserver import MCPServer
 
 from .agent_prompts import register_agent_prompts
 from .client_prompts import register_client_prompts
@@ -14,7 +14,7 @@ from .market_prompts import register_market_prompts
 from .property_prompts import register_property_prompts
 
 
-def register_all_prompts(mcp: FastMCP):
+def register_all_prompts(mcp: MCPServer):
     """
     Register all prompt templates with the MCP server
 

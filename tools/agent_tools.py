@@ -4,12 +4,12 @@ Agent-related MCP tools
 
 import json
 
-from mcp.server.fastmcp import FastMCP
+from mcp.server.mcpserver import MCPServer
 
 from utils import data_manager
 
 
-def register_agent_tools(mcp: FastMCP):
+def register_agent_tools(mcp: MCPServer):
     """Register all agent-related tools with the MCP server"""
 
     @mcp.tool()

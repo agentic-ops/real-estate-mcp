@@ -12,7 +12,7 @@ from __future__ import annotations
 
 import json
 
-from mcp.server.fastmcp import FastMCP
+from mcp.server.mcpserver import MCPServer
 
 from integrations import (
     CensusClient,
@@ -29,7 +29,7 @@ from integrations import (
 from utils import audit
 
 
-def register_integration_tools(mcp: FastMCP) -> None:
+def register_integration_tools(mcp: MCPServer) -> None:
     """Register live-integration tools with the MCP server."""
 
     @mcp.tool()

@@ -12,7 +12,7 @@ import re
 from pathlib import Path
 from typing import Any, Dict
 
-from mcp.server.fastmcp import FastMCP
+from mcp.server.mcpserver import MCPServer
 
 from utils import audit
 
@@ -159,7 +159,7 @@ def _build_property_report_docx(report: Dict[str, Any], output_path: Path) -> No
     document.save(str(output_path))
 
 
-def register_document_tools(mcp: FastMCP) -> None:
+def register_document_tools(mcp: MCPServer) -> None:
     """Register listing-document ingestion and export tools."""
 
     @mcp.tool()
