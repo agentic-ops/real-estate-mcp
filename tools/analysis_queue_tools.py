@@ -16,7 +16,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Generator, Optional, Tuple
 
-from mcp.server.fastmcp import FastMCP
+from mcp.server.mcpserver import MCPServer
 
 from utils import audit
 
@@ -84,7 +84,7 @@ def _run_analysis(file_path: str) -> Tuple[Optional[str], Optional[str]]:
     return json.dumps(result, indent=2), None
 
 
-def register_analysis_queue_tools(mcp: FastMCP) -> None:
+def register_analysis_queue_tools(mcp: MCPServer) -> None:
     """Register async property-analysis queue tools with the MCP server."""
 
     @mcp.tool()

@@ -2,7 +2,7 @@
 Market and investment-related prompt templates for the Real Estate MCP Server
 """
 
-from mcp.server.fastmcp import FastMCP
+from mcp.server.mcpserver import MCPServer
 
 
 def _generate_comparison_matrix(areas):
@@ -23,7 +23,7 @@ def _generate_comparison_matrix(areas):
     return matrix
 
 
-def register_market_prompts(mcp: FastMCP):
+def register_market_prompts(mcp: MCPServer):
     """Register all market and investment-related prompt templates with the MCP server"""
 
     @mcp.prompt()

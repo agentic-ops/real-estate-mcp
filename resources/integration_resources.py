@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 
-from mcp.server.fastmcp import FastMCP
+from mcp.server.mcpserver import MCPServer
 
 from integrations import (
     CensusClient,
@@ -21,7 +21,7 @@ from integrations import (
 from utils import audit
 
 
-def register_integration_resources(mcp: FastMCP) -> None:
+def register_integration_resources(mcp: MCPServer) -> None:
     """Register integration-status resources with the MCP server."""
 
     @mcp.resource("realestate://integrations/status")

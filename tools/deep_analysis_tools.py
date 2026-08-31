@@ -11,7 +11,7 @@ import json
 from typing import Any, Dict, Optional
 
 from mcp import types
-from mcp.server.fastmcp import Context, FastMCP
+from mcp.server.mcpserver import Context, MCPServer
 
 from utils import audit, get_data_manager
 
@@ -74,7 +74,7 @@ def _heuristic_only_payload(
     return json.dumps(payload, indent=2)
 
 
-def register_deep_analysis_tools(mcp: FastMCP) -> None:
+def register_deep_analysis_tools(mcp: MCPServer) -> None:
     """Register deep property analysis tools with the MCP server."""
 
     data = get_data_manager()

@@ -9,7 +9,7 @@ from typing import Any, Dict
 from unittest.mock import Mock
 
 import pytest
-from mcp.server.fastmcp import FastMCP
+from mcp.server.mcpserver import MCPServer
 
 from main import create_server
 from utils import PropertyFilter, RealEstateDataManager
@@ -222,7 +222,7 @@ def test_data_manager(temp_data_dir):
 @pytest.fixture
 def mock_mcp_server():
     """Create a mock FastMCP server for testing"""
-    return Mock(spec=FastMCP)
+    return Mock(spec=MCPServer)
 
 
 @pytest.fixture

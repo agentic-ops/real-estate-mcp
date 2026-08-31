@@ -4,12 +4,12 @@ Location resources for the Real Estate MCP Server
 
 import json
 
-from mcp.server.fastmcp import FastMCP
+from mcp.server.mcpserver import MCPServer
 
 from utils import data_manager
 
 
-def register_location_resources(mcp: FastMCP):
+def register_location_resources(mcp: MCPServer):
     """Register all location-related resources with the MCP server"""
 
     @mcp.resource("realestate://all-areas")

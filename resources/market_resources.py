@@ -4,12 +4,12 @@ Market resources for the Real Estate MCP Server
 
 import json
 
-from mcp.server.fastmcp import FastMCP
+from mcp.server.mcpserver import MCPServer
 
 from utils import data_manager
 
 
-def register_market_resources(mcp: FastMCP):
+def register_market_resources(mcp: MCPServer):
     """Register all market-related resources with the MCP server"""
 
     @mcp.resource("realestate://market-overview")

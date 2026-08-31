@@ -4,12 +4,12 @@ Client resources for the Real Estate MCP Server
 
 import json
 
-from mcp.server.fastmcp import FastMCP
+from mcp.server.mcpserver import MCPServer
 
 from utils import data_manager
 
 
-def register_client_resources(mcp: FastMCP):
+def register_client_resources(mcp: MCPServer):
     """Register all client-related resources with the MCP server"""
 
     @mcp.resource("realestate://client/{client_id}/matches")

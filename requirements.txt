@@ -4,7 +4,7 @@
 # --- Core (runtime) ---
 # The official Model Context Protocol SDK, including FastMCP and the
 # `mcp` CLI (which bundles the MCP Inspector integration).
-mcp[cli]>=1.28.0
+mcp[cli]>=2.0.0,<3
 
 # Pydantic 2.10 breaks FastMCP tool return-type wrapping; 2.11+ required.
 pydantic>=2.11

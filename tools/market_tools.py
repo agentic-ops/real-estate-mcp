@@ -4,12 +4,12 @@ Market analysis MCP tools
 
 import json
 
-from mcp.server.fastmcp import FastMCP
+from mcp.server.mcpserver import MCPServer
 
 from utils import data_manager
 
 
-def register_market_tools(mcp: FastMCP):
+def register_market_tools(mcp: MCPServer):
     """Register all market analysis tools with the MCP server"""
 
     @mcp.tool()

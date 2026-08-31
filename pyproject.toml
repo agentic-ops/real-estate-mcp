@@ -6,7 +6,7 @@ readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "AGPL-3.0-or-later" }
 dependencies = [
-    "mcp[cli]>=1.28.0",
+    "mcp[cli]>=2.0.0,<3",
     "pydantic>=2.11",
     "httpx>=0.28",
     "python-docx>=1.1",
