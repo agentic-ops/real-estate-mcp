@@ -47,6 +47,9 @@ logging.basicConfig(
     handlers=[logging.StreamHandler(sys.stderr)],
 )
 logger = logging.getLogger("real_estate_mcp")
+# httpx logs every request URL at INFO, and several integrations pass their
+# API key as a query parameter -- keep those URLs out of stderr.
+logging.getLogger("httpx").setLevel(logging.WARNING)
 
 
 def create_server(host: str = "127.0.0.1", port: int = 8000) -> FastMCP:

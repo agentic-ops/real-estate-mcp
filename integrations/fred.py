@@ -13,7 +13,7 @@ from __future__ import annotations
 
 from typing import Any, Dict, Optional
 
-from integrations.config import FredSettings, get_integration_settings
+from integrations.config import FredSettings, get_integration_settings, redact_secret
 from utils import audit
 
 MORTGAGE_30YR_SERIES_ID = "MORTGAGE30US"
@@ -99,7 +99,8 @@ class FredClient:
             return {
                 **self.status(),
                 "series_id": series_id,
-                "error": f"FRED request failed: {exc}",
+                "error": "FRED request failed: "
+                + redact_secret(exc, self.settings.api_key),
                 "results": [],
             }
 

@@ -38,7 +38,7 @@ from __future__ import annotations
 
 from typing import Any, Dict, Optional
 
-from integrations.config import ZillowSettings, get_integration_settings
+from integrations.config import ZillowSettings, get_integration_settings, redact_secret
 from utils import audit
 
 
@@ -124,7 +124,8 @@ class ZillowClient:
             return {
                 **self.status(),
                 "address": address,
-                "error": f"Zillow request failed: {exc}",
+                "error": "Zillow request failed: "
+                + redact_secret(exc, self.settings.api_key),
                 "results": [],
             }
 
