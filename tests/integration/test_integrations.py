@@ -5,7 +5,10 @@ All tests are network-free: real HTTP is replaced with
 production default where integrations are OFF.
 """
 
+from urllib.parse import quote
+
 import httpx
+import pytest
 
 from integrations.census import CensusClient
 from integrations.config import (
@@ -220,6 +223,46 @@ class TestStatusNeverLeaksSecrets:
     def test_noaa_status_is_always_configured(self):
         status = NoaaClient(NoaaSettings(enabled=True)).status()
         assert status["configured"] is True
+
+
+# A key with "/" and "+" proves the URL-encoded form is masked too.
+LEAKY_KEY = "leak/me+0123456789abcdef"
+
+
+def _failing_client(request):
+    return httpx.Response(503, text="upstream down")
+
+
+@pytest.mark.parametrize(
+    "make_call",
+    [
+        lambda http: CensusClient(
+            CensusSettings(enabled=True, api_key=LEAKY_KEY), http_client=http
+        ).demographics("37"),
+        lambda http: FbiCrimeClient(
+            FbiCrimeSettings(enabled=True, api_key=LEAKY_KEY), http_client=http
+        ).state_crime_summary("NC"),
+        lambda http: FredClient(
+            FredSettings(enabled=True, api_key=LEAKY_KEY), http_client=http
+        ).current_mortgage_rate_30yr(),
+        lambda http: RentCastClient(
+            RentCastSettings(enabled=True, api_key=LEAKY_KEY), http_client=http
+        ).lookup_property("1 Main St"),
+        lambda http: WalkScoreClient(
+            WalkScoreSettings(enabled=True, api_key=LEAKY_KEY), http_client=http
+        ).walk_score("1 Main St", 35.18, -80.82),
+        lambda http: ZillowClient(
+            ZillowSettings(enabled=True, api_key=LEAKY_KEY), http_client=http
+        ).lookup_zestimate("1 Main St"),
+    ],
+    ids=["census", "fbi_crime", "fred", "rentcast", "walkscore", "zillow"],
+)
+def test_request_errors_never_leak_api_key(make_call):
+    result = make_call(_mock_client(_failing_client))
+    assert "request failed" in result["error"]
+    assert "503" in result["error"]
+    assert LEAKY_KEY not in str(result)
+    assert quote(LEAKY_KEY, safe="") not in str(result)
 
 
 class TestEnabledWithMock:

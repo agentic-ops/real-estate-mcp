@@ -17,6 +17,7 @@ from __future__ import annotations
 import os
 from dataclasses import dataclass
 from typing import List, Optional
+from urllib.parse import quote
 
 CENSUS_DEFAULT_BASE_URL = "https://api.census.gov/data"
 RENTCAST_DEFAULT_BASE_URL = "https://api.rentcast.io/v1"
@@ -355,3 +356,18 @@ def get_integration_settings() -> IntegrationSettings:
     """Read the current integration settings from the environment."""
 
     return IntegrationSettings.from_env()
+
+
+def redact_secret(text: object, secret: Optional[str]) -> str:
+    """Return ``str(text)`` with ``secret`` (raw and URL-encoded) masked.
+
+    Network errors from httpx embed the full request URL, which carries the
+    API key for every integration that passes it as a query parameter. Run
+    any exception text through this before returning it to an MCP client.
+    """
+
+    message = str(text)
+    if secret:
+        for form in {secret, quote(secret, safe="")}:
+            message = message.replace(form, "[REDACTED]")
+    return message

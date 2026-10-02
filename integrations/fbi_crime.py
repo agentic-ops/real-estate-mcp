@@ -27,7 +27,11 @@ from __future__ import annotations
 import datetime
 from typing import Any, Dict, List, Optional
 
-from integrations.config import FbiCrimeSettings, get_integration_settings
+from integrations.config import (
+    FbiCrimeSettings,
+    get_integration_settings,
+    redact_secret,
+)
 from utils import audit
 
 
@@ -164,7 +168,8 @@ class FbiCrimeClient:
                 **self.status(),
                 "state_abbr": state_abbr,
                 "offense": offense,
-                "error": f"FBI Crime Data request failed: {exc}",
+                "error": "FBI Crime Data request failed: "
+                + redact_secret(exc, self.settings.api_key),
                 "results": [],
             }
 

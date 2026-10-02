@@ -20,7 +20,11 @@ from __future__ import annotations
 
 from typing import Any, Dict, Optional
 
-from integrations.config import WalkScoreSettings, get_integration_settings
+from integrations.config import (
+    WalkScoreSettings,
+    get_integration_settings,
+    redact_secret,
+)
 from utils import audit
 
 # https://www.walkscore.com/professional/api.php -- "Status and Error Codes"
@@ -128,7 +132,8 @@ class WalkScoreClient:
             return {
                 **self.status(),
                 "address": address,
-                "error": f"Walk Score request failed: {exc}",
+                "error": "Walk Score request failed: "
+                + redact_secret(exc, self.settings.api_key),
                 "results": [],
             }
 
